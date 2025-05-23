@@ -3,7 +3,7 @@ import { FaSearch, FaTrash, FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../css/OrganizationTable.css"; // Update import path
 import organizationModel from "../models/organizationModel";
-import OrganizationController from "../controllers/OrganizationController";
+import OrganizationController from "../controllers/organizationController";
 import UpdateOrganizationPage from "../pages/UpdateOrganizationPage"; // Ensure correct import
 
 const OrganizationPage = () => {
