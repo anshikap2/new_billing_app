@@ -14,15 +14,38 @@ const getAuthHeaders = () => {
 
 // Expenses
 export const getExpenses = async () => {
-  const cached = localStorage.getItem("expenses");
-  
+  try {
+    const cached = localStorage.getItem("expenses");
+    if (cached) {
+      const parsedCache = JSON.parse(cached);
+      // Only use cache if it's less than 5 minutes old
+      const cacheTime = localStorage.getItem("expenses_timestamp");
+      if (cacheTime && Date.now() - Number(cacheTime) < 300000) {
+        return parsedCache;
+      }
+    }
 
-  const response = await axios.get(`${API_BASE}/exp/expenses`, {
-    headers: getAuthHeaders()
-  });
+    const response = await axios.get(`${API_BASE}/exp/expenses`, {
+      headers: getAuthHeaders()
+    });
 
-  localStorage.setItem("expenses", JSON.stringify(response.data));
-  return response.data;
+    if (response.data) {
+      localStorage.setItem("expenses", JSON.stringify(response.data));
+      localStorage.setItem("expenses_timestamp", Date.now().toString());
+      return response.data;
+    }
+    
+    throw new Error("No data received from server");
+  } catch (error) {
+    console.error("Error fetching expenses:", error);
+    // If there's cached data and we can't reach the server, use the cache as fallback
+    const cached = localStorage.getItem("expenses");
+    if (cached) {
+      console.log("Using cached expense data as fallback");
+      return JSON.parse(cached);
+    }
+    throw error;
+  }
 };
 
 // Employees

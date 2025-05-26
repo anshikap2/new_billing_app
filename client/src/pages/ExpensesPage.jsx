@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import * as XLSX from 'xlsx';
 import {
   FaSearch,
   FaTrash,
   FaEdit,
   FaUserPlus,
   FaFolderPlus,
+  FaFilter,
+  FaFileExcel,
 } from "react-icons/fa";
 import Spinner from "../components/Spinner";
 import ExpensesGraphPage from "./ExpensesGraphPage";
@@ -24,6 +27,10 @@ const ExpensesPage = () => {
   const [isGraphOpen, setIsGraphOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [expandedRow, setExpandedRow] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [projectFilter, setProjectFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
 
   const categories = [
     "All",
@@ -35,6 +42,23 @@ const ExpensesPage = () => {
   ];
 
   const navigate = useNavigate();
+
+  // Generate array of last 12 months
+  const getLastTwelveMonths = () => {
+    const months = [];
+    const today = new Date();
+    
+    for (let i = 0; i < 12; i++) {
+      const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+      const value = date.toISOString().slice(0, 7); // YYYY-MM format
+      months.push({ label: monthYear, value });
+    }
+    
+    return months;
+  };
+
+  const months = getLastTwelveMonths();
 
   useEffect(() => {
     console.debug(`[ExpensesPage] Fetching expenses for page ${page}`);
@@ -65,40 +89,34 @@ const ExpensesPage = () => {
   };
 
   useEffect(() => {
-    console.debug(
-      `[ExpensesPage] Filtering expenses with search="${search}" and category="${selectedCategory}"`
-    );
-    setFilteredExpenses(
-      expenses.filter((expense) => {
-        let natureFundStr = "";
-        if (Array.isArray(expense.natureOfFund)) {
-          natureFundStr = expense.natureOfFund.join(" ").toLowerCase();
-        } else if (
-          typeof expense.natureOfFund === "object" &&
-          expense.natureOfFund !== null
-        ) {
-          natureFundStr = expense.natureOfFund.type?.toLowerCase() || "";
-        } else {
-          natureFundStr = String(expense.natureOfFund || "").toLowerCase();
-        }
+    const filtered = expenses.filter((expense) => {
+      // Basic search filter
+      const searchMatch =
+        expense.project.toLowerCase().includes(search.toLowerCase()) ||
+        expense.employee.toLowerCase().includes(search.toLowerCase()) ||
+        String(expense.natureOfFund || "").toLowerCase().includes(search.toLowerCase());
 
-        const matchesSearch =
-          expense.project.toLowerCase().includes(search.toLowerCase()) ||
-          expense.employee.toLowerCase().includes(search.toLowerCase()) ||
-          natureFundStr.includes(search.toLowerCase());
+      // Category filter
+      const categoryMatch =
+        selectedCategory === "All" ||
+        (Array.isArray(expense.natureOfFund)
+          ? expense.natureOfFund.includes(selectedCategory)
+          : expense.natureOfFund === selectedCategory);
 
-        const matchesCategory =
-          selectedCategory === "All" ||
-          (Array.isArray(expense.natureOfFund)
-            ? expense.natureOfFund.includes(selectedCategory)
-            : typeof expense.natureOfFund === "object"
-            ? expense.natureOfFund.type === selectedCategory
-            : expense.natureOfFund === selectedCategory);
+      // Project filter
+      const projectMatch = !projectFilter || expense.project === projectFilter;
 
-        return matchesSearch && matchesCategory;
-      })
-    );
-  }, [search, expenses, selectedCategory]);
+      // Employee filter
+      const employeeMatch = !employeeFilter || expense.employee === employeeFilter;
+
+      // Month filter
+      const monthMatch = !selectedMonth || expense.date.startsWith(selectedMonth);
+
+      return searchMatch && categoryMatch && projectMatch && employeeMatch && monthMatch;
+    });
+
+    setFilteredExpenses(filtered);
+  }, [search, expenses, selectedCategory, projectFilter, employeeFilter, selectedMonth]);
 
   const toggleRowExpansion = (expenseId) => {
     console.debug(`[ExpensesPage] Toggle row expansion for expenseId: ${expenseId}`);
@@ -156,6 +174,36 @@ const ExpensesPage = () => {
     }
   };
 
+  const resetFilters = () => {
+    setProjectFilter("");
+    setEmployeeFilter("");
+    setSelectedMonth("");
+    setSelectedCategory("All");
+    setSearch("");
+  };
+
+  const handleExportExcel = () => {
+    // Prepare data for export
+    const exportData = filteredExpenses.map(expense => ({
+      'Date': new Date(expense.date).toLocaleDateString(),
+      'Project': expense.project,
+      'Employee': expense.employee,
+      'Nature of Fund': displayNatureOfFund(expense.natureOfFund),
+      'Description': expense.description,
+      'Debit': Number(expense.debit || 0).toFixed(2),
+      'Credit': Number(expense.credit || 0).toFixed(2),
+      'Balance': (Number(expense.credit || 0) - Number(expense.debit || 0)).toFixed(2)
+    }));
+
+    // Create worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Expenses");
+
+    // Generate and download file
+    XLSX.writeFile(wb, `expenses_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
     <div className="expense-container">
       <div className="expense-fixed-header">
@@ -192,22 +240,28 @@ const ExpensesPage = () => {
             </span>
           </div>
           <button
+            className="action-button filter-btn"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FaFilter /> {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </button>
+          <button
             className="action-button create-btn"
             onClick={() => {
               console.debug("[ExpensesPage] Navigate to Create Expense page");
               navigate("/dashboard/create-expense");
             }}
           >
-            Create New
+            New
           </button>
           <button className="action-button emp-btn" onClick={handleAddEmployee}>
-            <FaUserPlus /> Add Emp
+            <FaUserPlus /> 
           </button>
           <button
             className="action-button project-btn"
             onClick={handleAddProject}
           >
-            <FaFolderPlus /> Add Project
+            <FaFolderPlus /> 
           </button>
           <button
             className="action-button graph-btn"
@@ -218,7 +272,59 @@ const ExpensesPage = () => {
           >
             Graph
           </button>
+          <button
+            className="export-excel-btn"
+            onClick={handleExportExcel}
+            title="Export to Excel"
+          >
+            <FaFileExcel /> 
+          </button>
         </div>
+
+        {showFilters && (
+          <div className="advanced-filters">
+            <div className="filter-group">
+              <select
+                value={projectFilter}
+                onChange={(e) => setProjectFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">All Projects</option>
+                {[...new Set(expenses.map(exp => exp.project))].map(project => (
+                  <option key={project} value={project}>{project}</option>
+                ))}
+              </select>
+
+              <select
+                value={employeeFilter}
+                onChange={(e) => setEmployeeFilter(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">All Employees</option>
+                {[...new Set(expenses.map(exp => exp.employee))].map(employee => (
+                  <option key={employee} value={employee}>{employee}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">All Months</option>
+                {months.map(month => (
+                  <option key={month.value} value={month.value}>
+                    {month.label}
+                  </option>
+                ))}
+              </select>
+
+              <button className="action-button reset-btn" onClick={resetFilters}>
+                Reset Filters
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="table-container">
@@ -358,15 +464,28 @@ const ExpensesPage = () => {
               )}
             </tbody>
             <tfoot>
-              <tr>
-                <td
-                  colSpan="3"
-                  style={{ textAlign: "right", fontWeight: "bold" }}
-                >
+              <tr className="summary-row">
+                <td colSpan="2" style={{ textAlign: "right", fontWeight: "bold" }}>
                   Total:
                 </td>
-                <td style={{ fontWeight: "bold" }}>₹{totalDebit}</td>
-                <td style={{ fontWeight: "bold" }}>₹{totalCredit}</td>
+                <td style={{ fontWeight: "bold", textAlign: "right" }}>
+                  Balance: 
+                  <span style={{ 
+                    color: totalCredit - totalDebit >= 0 ? "#059669" : "#dc2626",
+                    marginLeft: "8px"
+                  }}>
+                    ₹{Math.abs(totalCredit - totalDebit).toLocaleString()}
+                    <span className="balance-indicator" aria-hidden="true" style={{ marginLeft: "4px" }}>
+                      {totalCredit - totalDebit >= 0 ? '▲' : '▼'}
+                    </span>
+                  </span>
+                </td>
+                <td style={{ fontWeight: "bold", color: "#dc2626" }}>
+                  ₹{totalDebit.toLocaleString()}
+                </td>
+                <td style={{ fontWeight: "bold", color: "#059669" }}>
+                  ₹{totalCredit.toLocaleString()}
+                </td>
                 <td></td>
               </tr>
             </tfoot>

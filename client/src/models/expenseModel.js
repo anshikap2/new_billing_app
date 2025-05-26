@@ -1,32 +1,35 @@
 export class ExpenseModel {
-  constructor(data = {}) {
-    this.expenseId = data.expenseId || "EXP101";
-    this.project = data.project || "Unknown Project";
-    this.employee = data.employee || "Unknown Employee";
-    this.paidby = data.paidby || "Bank Transfer";
-
-    if (Array.isArray(data.natureOfFund)) {
-      this.natureOfFund = data.natureOfFund.map((item) =>
-        typeof item === "object" && item.type ? item.type : item
-      );
-    } else if (typeof data.natureOfFund === "string") {
-      this.natureOfFund = [data.natureOfFund];
-    } else {
-      this.natureOfFund = ["Miscellaneous"];
-    }
-
+  constructor(data) {
+    this.expenseId = data._id || data.expenseId;
+    this.project = data.project || "";
+    this.employee = data.employee || "";
+    this.natureOfFund = this.parseNatureOfFund(data.natureOfFund);
     this.debit = data.debit || 0;
     this.credit = data.credit || 0;
-    this.date = data.date ? new Date(data.date) : new Date();
-    this.updatedDate = data.updatedDate
-      ? new Date(data.updatedDate)
-      : new Date();
     this.remarks = data.remarks || "";
-    this.createdDate = data.createdDate
-      ? new Date(data.createdDate)
-      : new Date();
+    this.date = data.date;
+    this.updatedDate = data.updatedDate;
+    this.createdDate = data.createdDate;
+    this.paidby = data.paidby || "";
     this.paidbyDetails = data.paidbyDetails || "";
   }
+
+  parseNatureOfFund(raw) {
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch (e) {
+        console.warn("Failed to parse natureOfFund:", raw);
+        return raw;
+      }
+    }
+    return raw;
+  }
+
+
+
+
 
   static PAYMENT_STATUSES = {
     PENDING: "Pending",

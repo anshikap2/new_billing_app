@@ -14,7 +14,7 @@ const CreateExpensePage = () => {
     project: "",
     employee: "",
     paidby: "",
-    natureOfFund: [],
+    natureOfFund: "",
     debit: 0,
     credit: 0,
     date: new Date().toISOString().split("T")[0],
@@ -80,22 +80,12 @@ const CreateExpensePage = () => {
     }));
   };
 
-  // Checkbox handler for natureOfFund
-  const handleNatureOfFundChange = (type, isChecked) => {
-    setExpense((prev) => {
-      let updatedNatureOfFund = [...prev.natureOfFund];
-      if (isChecked) {
-        updatedNatureOfFund.push({ type });
-      } else {
-        updatedNatureOfFund = updatedNatureOfFund.filter(
-          (item) => item.type !== type
-        );
-      }
-      return {
-        ...prev,
-        natureOfFund: updatedNatureOfFund,
-      };
-    });
+  // Modified handler for natureOfFund radio buttons
+  const handleNatureOfFundChange = (type) => {
+    setExpense((prev) => ({
+      ...prev,
+      natureOfFund: type
+    }));
   };
 
   // Submit handler
@@ -111,7 +101,7 @@ const CreateExpensePage = () => {
 
     const cleanedExpense = {
       ...expense,
-      natureOfFund: expense.natureOfFund.map((item) => item.type),
+      natureOfFund: [{ type: expense.natureOfFund }]
     };
 
     console.log("📦 Payload being sent to backend:", cleanedExpense);
@@ -154,6 +144,7 @@ const CreateExpensePage = () => {
     "Equipment",
     "Office Supplies",
     "Misc",
+    "Local Travel & Accommodation",
   ];
 
   return (
@@ -165,7 +156,7 @@ const CreateExpensePage = () => {
       <form onSubmit={handleSubmit} className="create-expense-form">
         <div className="form-grid">
           <div className="form-group">
-            <label>Expense ID*</label>
+            <label>Expense ID</label>
             <input
               type="text"
               name="expenseId"
@@ -178,7 +169,7 @@ const CreateExpensePage = () => {
 
           {/* Project Dropdown */}
           <div className="form-group">
-            <label>Project*</label>
+            <label>Project</label>
             <select
               name="project"
               value={expense.project}
@@ -203,7 +194,7 @@ const CreateExpensePage = () => {
 
           {/* Employee Dropdown */}
           <div className="form-group">
-            <label>Employee*</label>
+            <label>Employee</label>
             <select
               name="employee"
               value={expense.employee}
@@ -227,7 +218,7 @@ const CreateExpensePage = () => {
           </div>
 
           <div className="form-group">
-            <label>Payment Method*</label>
+            <label>Payment Method</label>
             <select
               name="paidby"
               value={expense.paidby}
@@ -240,11 +231,12 @@ const CreateExpensePage = () => {
               <option value="Bank Transfer">Bank Transfer</option>
               <option value="UPI">UPI</option>
               <option value="Check">Check</option>
+              <option value="Bill/Voucher">Bill/Voucher</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label>Debit Amount (₹)*</label>
+            <label>Debit Amount (₹)</label>
             <input
               type="number"
               name="debit"
@@ -269,7 +261,7 @@ const CreateExpensePage = () => {
           </div>
 
           <div className="form-group">
-            <label>Date*</label>
+            <label>Date</label>
             <input
               type="date"
               name="date"
@@ -281,17 +273,15 @@ const CreateExpensePage = () => {
 
           <div className="form-group full-width">
             <label>Nature of Fund</label>
-            <div className="checkbox-group">
+            <div className="radio-group">
               {fundTypes.map((type) => (
                 <label key={type}>
                   <input
-                    type="checkbox"
-                    checked={expense.natureOfFund.some(
-                      (item) => item.type === type
-                    )}
-                    onChange={(e) =>
-                      handleNatureOfFundChange(type, e.target.checked)
-                    }
+                    type="radio"
+                    name="natureOfFund"
+                    value={type}
+                    checked={expense.natureOfFund === type}
+                    onChange={() => handleNatureOfFundChange(type)}
                   />
                   {type}
                 </label>

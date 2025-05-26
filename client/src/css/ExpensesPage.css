@@ -1,3 +1,5 @@
+@import './ScrollbarStyles.css';
+
 /* Product Table Styles */
 .expense-container {
     display: flex;
@@ -43,12 +45,10 @@
 /* Controls (Search + Add Button) */
 .expense-controls {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 12px;
-    padding: 0 10px;
+    gap: 12px;
     flex-wrap: wrap;
+    padding: 12px;
 }
 
 /* Category Select */
@@ -97,45 +97,104 @@
 }
 
 /* Common button styling */
-.action-button {
-    padding: 8px 15px;
-    font-size: 14px;
-    border-radius: 4px;
-    background-color: #0275d8;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    white-space: nowrap;
-    transition: background-color 0.3s ease;
-}
-
-.action-button:hover {
-    background-color: #0256a0;
-}
-
-/* Create Button */
-.create-btn {
-    height: 40px;
+.action-button,
+.export-excel-btn,
+.filter-btn,
+.create-btn,
+.emp-btn,
+.project-btn,
+.graph-btn {
     min-width: 120px;
+    height: 40px;
     padding: 0 16px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 6px;
-    border: none;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease;
+    gap: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    white-space: nowrap;
+}
+
+/* Icon-only buttons */
+.emp-btn,
+.project-btn,
+.export-excel-btn {
+    min-width: 50px;
+    width: 50px;
+    padding: 0;
+}
+
+/* Button colors */
+.create-btn {
+    background: #007bff;
+    color: white;
 }
 
 .create-btn:hover {
     background: #0056b3;
+}
+
+.filter-btn {
+    background: #f8f9fa;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.filter-btn:hover {
+    background: #e2e8f0;
+}
+
+.emp-btn,
+.project-btn {
+    background: #f8f9fa;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.emp-btn:hover,
+.project-btn:hover {
+    background: #e2e8f0;
+}
+
+.graph-btn {
+    background: #6b46c1;
+    color: white;
+}
+
+.graph-btn:hover {
+    background: #553c9a;
+}
+
+.export-excel-btn {
+    background: #28a745;
+    color: white;
+}
+
+.export-excel-btn:hover {
+    background: #218838;
+}
+
+/* Dark mode support */
+.dark-mode .action-button,
+.dark-mode .export-excel-btn,
+.dark-mode .filter-btn,
+.dark-mode .emp-btn,
+.dark-mode .project-btn {
+    background: #2d3748;
+    color: #e2e8f0;
+    border-color: #4a5568;
+}
+
+.dark-mode .action-button:hover,
+.dark-mode .export-excel-btn:hover,
+.dark-mode .filter-btn:hover,
+.dark-mode .emp-btn:hover,
+.dark-mode .project-btn:hover {
+    background: #4a5568;
 }
 
 /* Product Table */
@@ -379,24 +438,6 @@
     color: #808080;
 }
 
-/* Action Buttons */
-.dark-mode .action-button {
-    background-color: #0056b3;
-}
-
-.dark-mode .action-button:hover {
-    background-color: #004494;
-}
-
-/* Create Button */
-.dark-mode .create-btn {
-    background-color: #0056b3;
-}
-
-.dark-mode .create-btn:hover {
-    background-color: #004494;
-}
-
 /* Table Styles */
 .dark-mode .expense-table {
     background-color: #1e1e1e;
@@ -421,25 +462,6 @@
 /* Hover States */
 .dark-mode .expense-table tbody tr:hover {
     background-color: #333333;
-}
-
-/* Action Buttons */
-.dark-mode .expense-delete-btn {
-    background-color: rgba(255, 107, 107, 0.1);
-    color: #ff6b6b;
-}
-
-.dark-mode .expense-delete-btn:hover {
-    background-color: rgba(255, 107, 107, 0.2);
-}
-
-.dark-mode .expense-update-btn {
-    background-color: rgba(102, 163, 255, 0.1);
-    color: #66a3ff;
-}
-
-.dark-mode .expense-update-btn:hover {
-    background-color: rgba(102, 163, 255, 0.2);
 }
 
 /* Expandable Rows */
@@ -497,4 +519,220 @@
 
 .dark-mode .table-container::-webkit-scrollbar-thumb:hover {
     background: #888;
+}
+
+/* Advanced Filters Section */
+.advanced-filters {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.filter-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+  height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background-color: white;
+  color: #4a5568;
+  cursor: pointer;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.filter-select:hover {
+  border-color: #cbd5e0;
+}
+
+.filter-select option {
+  padding: 8px;
+}
+
+.reset-btn {
+  min-width: 100px;
+  height: 40px;
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: #fed7d7;
+}
+
+/* Dark mode styles */
+.dark-mode .advanced-filters {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
+.dark-mode .filter-select {
+  background-color: #2d3748;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .filter-select:hover {
+  border-color: #718096;
+}
+
+.dark-mode .reset-btn {
+  background-color: #2d3748;
+  color: #fc8181;
+  border-color: #fc8181;
+}
+
+.dark-mode .reset-btn:hover {
+  background-color: #3d4756;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .filter-group {
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    flex: 1 1 calc(33.333% - 1rem);
+    max-width: none;
+  }
+
+  .reset-btn {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-select {
+    flex: 1 1 100%;
+  }
+
+  .expense-controls {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .action-button,
+  .export-excel-btn,
+  .filter-btn,
+  .create-btn,
+  .emp-btn,
+  .project-btn,
+  .graph-btn {
+    flex: 1 1 auto;
+  }
+}
+
+.expense-table tfoot {
+    border-top: 2px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.expense-table tfoot .summary-row {
+    background: #f8fafc;
+}
+
+.expense-table tfoot .summary-row td {
+    padding: 16px 12px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.balance-indicator {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* Dark mode styles */
+.dark-mode .expense-table tfoot {
+    border-top-color: #4a5568;
+    background: #2d3748;
+}
+
+.dark-mode .expense-table tfoot .summary-row {
+    background: #2d3748;
+}
+
+/* Remove old balance summary styles since we're not using them anymore */
+.balance-summary,
+.balance-item {
+    display: none;
+}
+
+.expenses-container {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.expenses-content {
+    height: calc(100vh - 100px); /* Adjust based on your header/footer height */
+    width: 100%;
+    position: relative;
+    overflow: auto;
+}
+
+/* Remove the composes property and replace with direct class */
+.expenses-table-wrapper {
+  overflow: auto;
+  margin: 20px 0;
+}
+
+/* Apply scrollbar styles directly */
+.expenses-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.expenses-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.expenses-table-wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.expenses-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure content doesn't overflow horizontally */
+.expenses-section {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Table specific styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Prevent table cell content from causing overflow */
+td, th {
+    max-width: 300px; /* Adjust based on your needs */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 8px;
 }
