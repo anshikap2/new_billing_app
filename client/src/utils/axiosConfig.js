@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { API_BASE } from '../config/config';
 
+console.log('API Base URL:', API_BASE); // Debug log to verify API URL
+
 const axiosInstance = axios.create({
     baseURL: API_BASE,
     headers: {
         'Content-Type': 'application/json'
     },
-    timeout: 10000 // 10 second timeout
+    timeout: 30000 // Increased to 30 seconds for debugging
 });
 
 // Request interceptor
@@ -16,7 +18,11 @@ axiosInstance.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('Making request to:', config.url);
+        console.log('Making request to:', config.url, {
+            method: config.method,
+            baseURL: config.baseURL,
+            timeout: config.timeout
+        });
         return config;
     },
     (error) => {
@@ -39,7 +45,8 @@ axiosInstance.interceptors.response.use(
             console.error('Server Error:', {
                 status: error.response.status,
                 data: error.response.data,
-                endpoint: error.config.url
+                endpoint: error.config.url,
+                method: error.config.method
             });
 
             if (error.response.status === 401) {
@@ -50,7 +57,8 @@ axiosInstance.interceptors.response.use(
             // Request was made but no response received
             console.error('Network Error: No response received', {
                 url: error.config.url,
-                method: error.config.method
+                method: error.config.method,
+                baseURL: error.config.baseURL
             });
         } else {
             // Error in request configuration
