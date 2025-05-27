@@ -17,5 +17,20 @@ export default defineConfig({
         main: 'index.html'
       }
     }
+  },
+  //  This is the crucial part for routing support in production
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
+  //  Add this to support client-side routing in production
+  optimizeDeps: {
+    include: [],
+  },
+  //  The important fix
+  preview: {
+    // Required for Vercel/Netlify-like SPA behavior
+    fallback: '/index.html'
   }
 })
