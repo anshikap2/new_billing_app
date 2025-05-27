@@ -6,6 +6,19 @@
       "dest": "https://new-billing-app.onrender.com/api/$1"
     },
     {
+      "src": "^/assets/(.*)\\.js$",
+      "headers": { "content-type": "application/javascript" },
+      "dest": "/assets/$1.js"
+    },
+    {
+      "src": "^/(.*)\\.js$",
+      "headers": { "content-type": "application/javascript" },
+      "dest": "/$1.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
