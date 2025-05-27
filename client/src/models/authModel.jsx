@@ -5,7 +5,7 @@ export const handleLogin = async (email, password, navigate, setError) => {
     console.log('Attempting login with:', email);
     await loginUser(email, password);
     window.dispatchEvent(new Event('storage'));
-    navigate('/dashboard');
+    navigate('/dashboardd');
   } catch (error) {
     console.error('Login Error:', error);
 
@@ -26,24 +26,11 @@ export const handleLogin = async (email, password, navigate, setError) => {
 
 export const handleSignup = async (userName, email, password, navigate, setMessage, setError) => {
   try {
-    console.log('Attempting signup with:', userName, email);
-    await signupUser(userName, email, password);
-    window.dispatchEvent(new Event('storage'));
-    navigate('/dashboard');
+    const response = await signupUser(userName, email, password);
+    setMessage('Signup successful! Please login with your credentials.');
+    return true;  // Return success status
   } catch (error) {
-    console.error('Signup Error:', error);
-
-    // Debug additional info
-    if (error.response) {
-      console.error('Response data:', error.response.data);
-      console.error('Response status:', error.response.status);
-      console.error('Response headers:', error.response.headers);
-    } else if (error.request) {
-      console.error('Request made but no response:', error.request);
-    } else {
-      console.error('Error message:', error.message);
-    }
-
-    setError(error?.response?.data?.message || error.message || 'Signup failed');
+    setError(error?.response?.data?.message || 'Signup failed');
+    return false;
   }
 };

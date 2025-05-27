@@ -1,37 +1,35 @@
 import axios from 'axios';
 import { API_BASE } from '../config/config';
 
-console.log('API Base URL:', API_BASE); // Debug log to verify API URL
-
 const axiosInstance = axios.create({
     baseURL: API_BASE,
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    timeout: 30000 // Increased to 30 seconds for debugging
+    timeout: 30000
 });
 
-// Request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
+        // Set default headers
+        config.headers = {
+            ...config.headers,
+            'Content-Type': 'application/json'
+        };
+
+        // Add auth token if exists
         const token = localStorage.getItem('authToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        console.log('Making request to:', config.url, {
-            method: config.method,
-            baseURL: config.baseURL,
-            timeout: config.timeout
-        });
+
+        // Special handling for registration endpoint
+        if (config.url === '/auth/register') {
+            config.headers['Content-Type'] = 'application/json';
+        }
+
         return config;
     },
-    (error) => {
-        console.error('Request Error:', error);
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
-// Response interceptor
 axiosInstance.interceptors.response.use(
     (response) => {
         if (response.data.token) {

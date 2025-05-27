@@ -4,6 +4,10 @@
     {
       "source": "/api/(.*)",
       "destination": "https://new-billing-app.onrender.com"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

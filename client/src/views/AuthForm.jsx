@@ -15,12 +15,23 @@ const AuthForm = () => {
 
     const toggleForm = () => setIsLogin(!isLogin);
 
-    const handleSubmit = (e) => {
+    const clearForm = () => {
+        setPassword("");
+        setUserName("");
+        setError("");
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (isLogin) {
             handleLogin(email, password, navigate, setError);
         } else {
-            handleSignup(userName, email, password, navigate, setMessage, setError); // Fixed the order of params here
+            const success = await handleSignup(userName, email, password, navigate, setMessage, setError);
+            if (success) {
+                clearForm();
+                setIsLogin(true);
+                setMessage("Signup successful! Please login with your credentials.");
+            }
         }
     };
     
