@@ -291,3 +291,24 @@ box-shadow: 0 4px 12px rgba(26, 117, 255, 0.2);
 .dark-mode .update-exp-cancel-btn:hover {
 background: #333;
 }
+.error-container {
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 300px;
+}
+.error-message {
+background: #fee2e2;
+border: 1px solid #ef4444;
+border-radius: 8px;
+padding: 20px;
+text-align: center;
+color: #dc2626;
+}
+.error-message h3 {
+margin: 0 0 10px;
+font-size: 1.2em;
+}
+.error-message p {
+margin: 5px 0;
+}

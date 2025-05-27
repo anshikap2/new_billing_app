@@ -306,7 +306,7 @@ const CreateExpensePage = () => {
             className="cancel-btn"
             onClick={() => navigate("/dashboard/expenses-page")}
           >
-            Cancel
+            Back
           </button>
           <button type="submit" className="submit-btn">
             Create Expense

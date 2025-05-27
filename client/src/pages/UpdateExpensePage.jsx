@@ -9,6 +9,7 @@ const UpdateExpensePage = () => {
   const navigate = useNavigate();
   const { expenseId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formValid, setFormValid] = useState(false);
 
   const [expense, setExpense] = useState({
@@ -47,8 +48,12 @@ const UpdateExpensePage = () => {
   useEffect(() => {
     const fetchExpenseData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const response = await axios.get(`/exp/expenses/${expenseId}`);
+        if (!response.data) {
+          throw new Error('Expense not found');
+        }
         const data = response.data;
 
         // Handle the natureOfFund data which might come in different formats
@@ -72,9 +77,12 @@ const UpdateExpensePage = () => {
           natureOfFund: natureOfFundArray,
         });
       } catch (error) {
+        setError(error.response?.data?.message || 'Failed to load expense data');
         console.error('Error fetching expense:', error);
-        alert('Error loading expense data. Redirecting to expenses list.');
-        navigate('/dashboard/expenses-page');
+        // Add timeout before redirecting
+        setTimeout(() => {
+          navigate('/dashboard/expenses-page');
+        }, 3000); // 3 seconds delay
       } finally {
         setLoading(false);
       }
@@ -147,6 +155,19 @@ const UpdateExpensePage = () => {
       setLoading(false);
     }
   };
+
+  // Add error display
+  if (error) {
+    return (
+      <div className="update-expense-container error-container">
+        <div className="error-message">
+          <h3>Error</h3>
+          <p>{error}</p>
+          <p>Redirecting to expenses list...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (loading && !expense.project) {
     return (
