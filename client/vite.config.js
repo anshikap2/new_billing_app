@@ -1,36 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: '/', // ✅ important for correct asset paths in production
   server: {
     port: 5173,
     host: 'localhost',
     strictPort: true
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // ✅ safer alias resolution
+    },
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
-      input: {
-        main: 'index.html'
-      }
+      input: 'index.html' // ✅ no need to use `{ main: 'index.html' }` — use string
     }
-  },
-  //  This is the crucial part for routing support in production
-  resolve: {
-    alias: {
-      '@': '/src',
-    },
-  },
-  //  Add this to support client-side routing in production
-  optimizeDeps: {
-    include: [],
-  },
-  //  The important fix
-  preview: {
-    // Required for Vercel/Netlify-like SPA behavior
-    fallback: '/index.html'
   }
 })
