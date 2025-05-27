@@ -224,58 +224,70 @@ width: 100%;
 }
 /* Dark mode support */
 .dark-mode .update-expense-container {
-background: #1a202c;
-color: #e2e8f0;
+background: #171717;
+color: #e0e0e0;
+}
+.dark-mode .update-expense-header {
+border-bottom-color: #2c2c2c;
 }
 .dark-mode .update-expense-header h2 {
-color: #f7fafc;
+color: #66a3ff;
 }
 .dark-mode .update-expense-header p {
 color: #a0aec0;
 }
 .dark-mode .update-expense-form {
-background: #2d3748;
+background: #1e1e1e;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 .dark-mode .form-group label {
-color: #e2e8f0;
+color: #e0e0e0;
 }
 .dark-mode .form-group input,
 .dark-mode .form-group select,
 .dark-mode .form-group textarea {
-background: #1a202c;
-border-color: #4a5568;
-color: #e2e8f0;
+background: #2c2c2c;
+border-color: #404040;
+color: #e0e0e0;
 }
 .dark-mode .form-group input:focus,
 .dark-mode .form-group select:focus,
 .dark-mode .form-group textarea:focus {
-border-color: #63b3ed;
-background: #2d3748;
+border-color: #66a3ff;
+background: #2c2c2c;
+box-shadow: 0 0 0 3px rgba(102, 163, 255, 0.15);
 }
 .dark-mode .valid-input {
-background-color: #1c4532 !important;
-border-color: #48bb78 !important;
+background-color: #1a331d !important;
+border-color: #2ecc71 !important;
 }
 .dark-mode .add-btn {
-background: #2c5282;
-border-color: #4299e1;
-color: #ebf8ff;
+background: #1a75ff;
+border-color: #404040;
+color: #e0e0e0;
 }
 .dark-mode .add-btn:hover {
-background: #2b6cb0;
+background: #0056b3;
 }
 .dark-mode .remove-btn {
-background: #742a2a;
-color: #fed7d7;
+background: #321c1c;
+color: #ff6b6b;
 }
 .dark-mode .remove-btn:hover {
-background: #9b2c2c;
+background: #4d2a2a;
 }
 .dark-mode .update-exp-cancel-btn {
-background: #2d3748;
-color: #e2e8f0;
-border-color: #4a5568;
+background: #2c2c2c;
+color: #e0e0e0;
+border-color: #404040;
+}
+.dark-mode .update-exp-submit-btn {
+background: #1a75ff;
+}
+.dark-mode .update-exp-submit-btn:hover:not(:disabled) {
+background: #0056b3;
+box-shadow: 0 4px 12px rgba(26, 117, 255, 0.2);
 }
 .dark-mode .update-exp-cancel-btn:hover {
-background: #4a5568;
+background: #333;
 }

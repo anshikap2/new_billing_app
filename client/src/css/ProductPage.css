@@ -189,12 +189,13 @@
 /* Dark Mode Styles */
 .dark-mode .product-container {
   background-color: #1a1a1a !important;
-  color: #ffffff;
+  color: #e0e0e0;
 }
 
 .dark-mode .Product-fixed-header {
-  background-color: #2d2d2d;
-  border-bottom-color: #8b4f2d;
+  background-color: #242424;
+  border-bottom-color: #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .product-title {
@@ -202,42 +203,49 @@
 }
 
 .dark-mode .product-search-bar {
-  background: #2d2d2d;
+  background: #2c2c2c;
   border-color: #404040;
 }
 
 .dark-mode .product-search-bar input {
-  background: #2d2d2d;
-  color: #ffffff;
+  background: #2c2c2c;
+  color: #e0e0e0;
 }
 
-.dark-mode .product-search-icon {
-  color: #999;
+.dark-mode .product-create-btn {
+  background: #1a75ff;
+}
+
+.dark-mode .product-create-btn:hover {
+  background: #0056b3;
+  box-shadow: 0 4px 12px rgba(26, 117, 255, 0.3);
 }
 
 .dark-mode .product-table th {
-  background-color: #404040;
+  background-color: #242424;
+  color: #66a3ff;
 }
 
 .dark-mode .product-table td {
-  border-bottom-color: #404040;
+  border-color: #333;
+  color: #e0e0e0;
 }
 
 .dark-mode .product-table tr:hover {
-  background-color: #333333;
+  background-color: #242424;
+}
+
+.dark-mode .product-table tbody tr:nth-child(even) {
+  background-color: #1e1e1e;
 }
 
 .dark-mode .pagination-btn {
-  background-color: #2d2d2d;
+  background-color: #2c2c2c;
   border-color: #404040;
-  color: #ffffff;
-}
-
-.dark-mode .pagination-btn:hover:not(:disabled) {
-  background-color: #404040;
+  color: #e0e0e0;
 }
 
 .dark-mode .pagination-btn.active {
-  background-color: #0056b3;
-  border-color: #004494;
+  background-color: #1a75ff;
+  color: white;
 }

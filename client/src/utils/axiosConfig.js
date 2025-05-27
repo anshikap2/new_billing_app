@@ -50,9 +50,9 @@ axiosInstance.interceptors.response.use(
             });
 
             if (error.response.status === 401) {
-                localStorage.removeItem('authToken');
-                window.location.href = '/auth';
-            }
+            localStorage.removeItem('authToken');
+            window.location.href = '/auth';
+        }
         } else if (error.request) {
             // Request was made but no response received
             console.error('Network Error: No response received', {

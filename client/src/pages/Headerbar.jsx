@@ -21,8 +21,7 @@ const Headerbar = () => {
         <h1>My Billing App</h1>
       </div>
       <div className="header-right">
-        <input type="text" placeholder="Search..." />
-        <FaSearch />
+       
            {/* Profile Icon linked to profile page */}
           
            <div className="icon-container">

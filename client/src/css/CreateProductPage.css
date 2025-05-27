@@ -66,7 +66,8 @@
 .dark-mode .organization-container {
   background-color: #1e1e1e;
   color: #e0e0e0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2c2c2c;
 }
 
 .dark-mode .create-product-container h2,
@@ -82,27 +83,36 @@
 
 .dark-mode .input-field:focus {
   border-color: #66a3ff;
-  box-shadow: 0 0 5px rgba(102, 163, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(102, 163, 255, 0.15);
+  outline: none;
+}
+
+.dark-mode .input-field::placeholder {
+  color: #808080;
 }
 
 .dark-mode .btn-submit {
-  background-color: #1e5a2d;
+  background: #1a75ff;
+  color: #ffffff;
 }
 
 .dark-mode .btn-submit:hover {
-  background-color: #164020;
+  background: #0056b3;
+  box-shadow: 0 4px 12px rgba(26, 117, 255, 0.2);
 }
 
 .dark-mode .btn-back {
-  background-color: #8b2029;
+  background: #dc3545;
+  color: #ffffff;
 }
 
 .dark-mode .btn-back:hover {
-  background-color: #6b1820;
+  background: #bd2130;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }
 
-/* Add smooth transitions */
-* {
+/* Dark mode transitions */
+.dark-mode * {
   transition: background-color 0.3s ease,
               color 0.3s ease,
               border-color 0.3s ease,

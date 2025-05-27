@@ -304,14 +304,18 @@
 
 /* Dark Mode Styles */
 .dark-mode .inventory-container {
-  background-color: #121212 !important;
+  background-color: #171717 !important;
   color: #e0e0e0;
+  border: none;
+  outline: none;
 }
 
 .dark-mode .inventory-fix-header {
   background-color: #1e1e1e;
-  border-bottom-color: #6b4229;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #2c2c2c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  border-radius: 8px;
 }
 
 .dark-mode .inventory-title {
@@ -319,8 +323,8 @@
 }
 
 .dark-mode .inventory-search-section {
-  background-color: #1e1e1e;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: #242424;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dark-mode .inventory-search-bar {
@@ -333,75 +337,95 @@
   color: #e0e0e0;
 }
 
-.dark-mode .inventory-search-icon {
-  color: #66a3ff;
-}
-
 .dark-mode .inventory-filter-dropdown {
   background-color: #2c2c2c;
-  color: #e0e0e0;
   border-color: #404040;
+  color: #e0e0e0;
+}
+
+.dark-mode .inventory-create-btn {
+  background: #1a75ff;
+}
+
+.dark-mode .inventory-create-btn:hover {
+  background: #0056b3;
+  box-shadow: 0 4px 12px rgba(26, 117, 255, 0.2);
 }
 
 .dark-mode .inventory-section {
   background-color: #1e1e1e;
-}
-
-.dark-mode .inventory-section::-webkit-scrollbar-thumb {
-  background-color: #0056b3;
-}
-
-.dark-mode .inventory-section::-webkit-scrollbar-track {
-  background-color: #2c2c2c;
+  border: 1px solid #2c2c2c;
 }
 
 .dark-mode .inventory-table-container {
   background-color: #1e1e1e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2c2c2c;
+  box-shadow: none;
+}
+
+.dark-mode .inventory-table {
+  border-collapse: collapse;
+  background-color: #1e1e1e;
+}
+
+.dark-mode .inventory-table thead {
+  background-color: #242424;
+  border-bottom: 2px solid #2c2c2c;
 }
 
 .dark-mode .inventory-table th {
-  background-color: #2c2c2c;
-  color: #e0e0e0;
+  background-color: #242424;
+   color: #66a3ff;
+  border-bottom: none;
 }
 
 .dark-mode .inventory-table td {
-  border-bottom-color: #404040;
-  color: #e0e0e0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.dark-mode .inventory-table tbody tr:nth-child(even) {
+  background-color: #1a1a1a;
 }
 
 .dark-mode .inventory-table tr:hover {
-  background-color: #252525;
+  background-color: #242424;
+  border: none;
 }
 
-.dark-mode .purchase-btn {
-  background-color: #1e5a2d;
+.dark-mode .inventory-action .icon-btn {
+  color: #66a3ff !important;
 }
 
-.dark-mode .purchase-btn:hover {
-  background-color: #164020;
+.dark-mode .inventory-action .icon-btn:hover {
+  background: rgba(102, 163, 255, 0.1);
+}
+
+.dark-mode .inventory-section::-webkit-scrollbar-track {
+  background-color: #1a1a1a;
+}
+
+.dark-mode .inventory-section::-webkit-scrollbar-thumb {
+  background-color: #404040;
+  border: 2px solid #1a1a1a;
+}
+
+.dark-mode .inventory-section::-webkit-scrollbar-thumb:hover {
+  background-color: #4a4a4a;
 }
 
 .dark-mode .inventory-pagination button {
   background-color: #2c2c2c;
   color: #e0e0e0;
-}
-
-.dark-mode .inventory-pagination button:disabled {
-  background-color: #1e1e1e;
-  color: #666666;
+  border-color: #404040;
 }
 
 .dark-mode .inventory-pagination button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: #1a75ff;
 }
 
-.dark-mode .icon-btn {
-  color: #66a3ff;
-}
-
-.dark-mode .icon-btn:hover {
-  background-color: rgba(102, 163, 255, 0.1);
+.dark-mode .inventory-pagination button:disabled {
+  background-color: #242424;
+  color: #666;
 }
 
 /* Add smooth transitions */

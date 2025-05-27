@@ -149,7 +149,7 @@ const Home = () => {
       <div className="home-container">
         {/* Navigation Bar */}
         <nav className="navbar">
-          <h1 className="logo">My App</h1>
+          <h1 className="logo">My Billing App</h1>
           <div className="nav-links">
             <Link to="/auth" className="nav-button">Login</Link>
             <Link to="/auth" className="nav-button">Signup</Link>

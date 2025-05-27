@@ -14,14 +14,51 @@
 
 /* Settings Dialog */
 .settings-dialog {
-  width: 400px;
+  width: 450px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.2);
   text-align: center;
-  padding: 20px;
+  padding: 25px;
   position: relative;
   overflow: hidden;
+}
+
+/* Close Button (Cross Sign) */
+.settings-dialog .close-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.settings-dialog .close-icon::before,
+.settings-dialog .close-icon::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 2px;
+  background-color: #333;
+  border-radius: 1px;
+}
+
+.settings-dialog .close-icon::before {
+  transform: rotate(45deg);
+}
+
+.settings-dialog .close-icon::after {
+  transform: rotate(-45deg);
+}
+
+.settings-dialog .close-icon:hover {
+  opacity: 1;
 }
 
 /* Gradient Header */
@@ -31,47 +68,39 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 6px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  height: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
 }
 
 /* Title */
 .settings-title {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #1f2937;
 }
 
 /* Settings Sections */
 .settings-section {
-  text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .settings-section h3 {
   font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.settings-section p {
-  font-size: 14px;
-  color: #666;
-  margin: 5px 0;
+  color: #374151;
+  margin-bottom: 12px;
 }
 
 /* Toggle & Dropdown Containers */
 .toggle-container, .dropdown-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #f8f8f8;
-  padding: 8px 12px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  color: #333;
+  background: #f3f4f6;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-container:hover, .dropdown-container:hover {
+  background: #e5e7eb;
 }
 
 /* Input & Select */
@@ -89,85 +118,49 @@ select {
   font-size: 14px;
 }
 
-/* Buttons */
+/* Settings Button */
 .settings-button {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border: none;
-  padding: 10px 15px;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-}
-.close-button {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border: none;
-  padding: 10px 15px;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-  display: block;
-  width: 20%;
-  margin-top: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
 }
 
-
-
-.settings-button:hover, .close-button:hover {
-  opacity: 0.85;
-}
-
-/* Theme Styles */
-.theme-selector {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0;
-}
-
-.theme-options {
-  display: flex;
-  gap: 10px;
-}
-
-.theme-button {
-  padding: 8px 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.theme-button.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
+.settings-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
 }
 
 /* Dark Theme Styles - Scoped to dialog only */
 .dark-mode .settings-dialog {
-  background-color: #1e1e1e;
-  color: #e0e0e0;
+  background-color: #1f2937;
 }
 
 .dark-mode .settings-title {
-  color: #e0e0e0;
+  color: #ffffff;
 }
 
 .dark-mode .settings-section h3 {
-  color: #e0e0e0;
+  color: #ffffff;
 }
 
 .dark-mode .toggle-container {
-  background-color: #2c2c2c;
-  color: #e0e0e0;
+  background-color: #374151;
+}
+
+.dark-mode .toggle-container span {
+  color: #ffffff;
+}
+
+.dark-mode .settings-section p {
+  color: #d1d5db;
+}
+
+.dark-mode .close-icon::before,
+.dark-mode .close-icon::after {
+  background-color: #ffffff;
 }
 
 /* Keep overlay semi-transparent regardless of theme */

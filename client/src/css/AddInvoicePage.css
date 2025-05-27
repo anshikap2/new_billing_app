@@ -622,55 +622,154 @@ background: #0056b3;
 
 /* Dark Mode Styles */
 .dark-mode .add-invoice-container {
-  background-color: #121212;
+  background-color: #171717 !important;
   color: #e0e0e0;
 }
 
-.dark-mode input, 
+.dark-mode .heading {
+  color: #66a3ff;
+}
+
+.dark-mode input,
 .dark-mode select {
   background-color: #2c2c2c;
   border-color: #404040;
   color: #e0e0e0;
 }
 
+.dark-mode input:focus,
+.dark-mode select:focus {
+  border-color: #66a3ff;
+  box-shadow: 0 0 0 3px rgba(102, 163, 255, 0.15);
+}
+
 .dark-mode input:disabled {
-  background-color: #1a1a1a;
+  background-color: #242424;
   color: #808080;
 }
 
 .dark-mode .invoice-section,
+.dark-mode .invoice-customers-section input[readonly],
 .dark-mode .invoice-customers-section,
 .dark-mode .invoice-product-section,
 .dark-mode .invoice-organization-section,
 .dark-mode .invoice-payment-section,
-.dark-mode .invoice-shipping-section,
 .dark-mode .invoice-summary-section,
-.dark-mode .invoice-discount-section {
-  background-color: #1e1e1e;
+.dark-mode .invoice-discount-section,
+.dark-mode .invoice-shipping-section {
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .add-invoice-table thead {
-  background-color: #2c2c2c;
+.dark-mode .row-8 label {
   color: #e0e0e0;
 }
 
-.dark-mode .add-invoice-table th, 
+.dark-mode .back-button {
+  background: #1a75ff;
+}
+
+.dark-mode .back-button:hover {
+  background: #0056b3;
+  box-shadow: 0 4px 12px rgba(26, 117, 255, 0.2);
+}
+
+.dark-mode .add-invoice-table {
+  background: #1e1e1e;
+}
+
+.dark-mode .add-invoice-table thead {
+  background: #242424;
+}
+
+.dark-mode .add-invoice-table th {
+  background: #242424 !important;
+  color: #66a3ff;
+  border-color: #2c2c2c;
+}
+
 .dark-mode .add-invoice-table td {
+  border-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+.dark-mode .add-invoice-table tr:nth-child(even) {
+  background: #1a1a1a;
+}
+
+.dark-mode .add-invoice-table tr:hover {
+  background: #242424;
+}
+
+.dark-mode .quantity-controls {
+  border-color: #404040;
+  background: #2c2c2c;
+}
+
+.dark-mode .quantity-btn {
+  background: #2c2c2c;
+  color: #66a3ff;
+}
+
+.dark-mode .quantity-btn:hover:not(:disabled) {
+  background: #242424;
+}
+
+.dark-mode .quantity-input {
+  background: #2c2c2c;
   border-color: #404040;
   color: #e0e0e0;
 }
 
-.dark-mode .add-invoice-table tbody tr:nth-child(even) {
-  background-color: #252525;
+.dark-mode .stock-info {
+  background: #242424;
+  border-color: #404040;
+  color: #b0b0b0;
 }
 
-.dark-mode .add-invoice-table tbody tr:hover {
-  background-color: #303030;
+.dark-mode .address-card {
+  background: #2c2c2c;
+  border-color: #404040;
 }
 
+.dark-mode .address-card:hover {
+  background: #242424;
+  border-color: #66a3ff;
+}
+
+.dark-mode .address-card.selected {
+  background: #1a2733;
+  border-color: #66a3ff;
+}
+
+.dark-mode .shipping-form {
+  background: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode h3,
+.dark-mode h4 {
+  color: #66a3ff;
+}
+
+.dark-mode label {
+  color: #e0e0e0;
+}
+
+/* Dark mode transitions */
+.dark-mode * {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Dark Mode Summary Card Styles */
 .dark-mode .add-invoice-payment-summary {
-  background-color: #1e1e1e;
+  background: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   color: #e0e0e0;
 }
 
@@ -683,153 +782,26 @@ background: #0056b3;
   color: #b0b0b0;
 }
 
-.dark-mode .quantity-controls {
-  border-color: #404040;
-  background-color: #2c2c2c;
-}
-
-.dark-mode .quantity-btn {
-  background-color: #2c2c2c;
-  color: #66a3ff;
-}
-
-.dark-mode .quantity-btn:hover:not(:disabled) {
-  background-color: #353535;
-}
-
-.dark-mode .quantity-btn:disabled {
-  color: #666666;
-}
-
-.dark-mode .quantity-input {
-  background-color: #2c2c2c;
+.dark-mode .add-invoice-payment-summary label {
   color: #e0e0e0;
-  border-color: #404040;
 }
 
-.dark-mode .stock-info {
-  background-color: #2c2c2c;
-  color: #b0b0b0;
-  border-color: #404040;
-}
-
-.dark-mode .back-button,
-.dark-mode .save-button button {
-  background-color: #0056b3;
-  color: #ffffff;
-}
-
-.dark-mode .back-button:hover,
-.dark-mode .save-button button:hover {
-  background-color: #004494;
-}
-
-/* Dark Mode Styles for Shipping Section */
-.dark-mode .invoice-shipping-section {
-  background-color: #1e1e1e;
+.dark-mode .add-invoice-payment-summary input {
+  background: #2c2c2c;
   border-color: #404040;
   color: #e0e0e0;
 }
 
-.dark-mode .shipping-header {
-  color: #e0e0e0;
-}
-
-.dark-mode .shipping-toggle {
-  color: #b0b0b0;
-}
-
-.dark-mode .shipping-toggle input[type="checkbox"] {
-  border-color: #404040;
-}
-
-.dark-mode .address-grid {
-  background-color: #1e1e1e;
-}
-
-.dark-mode .address-card {
-  background-color: #2c2c2c;
-  border-color: #404040;
-  color: #e0e0e0;
-}
-
-.dark-mode .address-card:hover {
-  background-color: #353535;
+.dark-mode .add-invoice-payment-summary input:focus {
   border-color: #66a3ff;
+  box-shadow: 0 0 0 3px rgba(102, 163, 255, 0.15);
 }
 
-.dark-mode .address-card.selected {
-  background-color: #1a2733;
-  border-color: #66a3ff;
-}
-
-.dark-mode .address-details h4 {
-  color: #66a3ff;
-}
-
-.dark-mode .new-address-button {
-  background-color: #2c2c2c;
-  border-color: #66a3ff;
-  color: #66a3ff;
-}
-
-.dark-mode .new-address-button:hover {
-  background-color: #1a2733;
-}
-
-.dark-mode .shipping-form {
-  background-color: #1e1e1e;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.dark-mode .form-header {
-  border-bottom-color: #404040;
-}
-
-.dark-mode .form-header h4 {
-  color: #e0e0e0;
-}
-
-.dark-mode .shipping-form input {
-  background-color: #2c2c2c;
+.dark-mode .add-invoice-payment-summary input[type="number"] {
+  background: #2c2c2c;
   border-color: #404040;
-  color: #e0e0e0;
 }
 
-.dark-mode .shipping-form input:focus {
-  border-color: #66a3ff;
-  background-color: #353535;
+.dark-mode .add-invoice-payment-summary p:last-child {
+  color: #ff6b6b;
 }
-
-.dark-mode .shipping-form input::placeholder {
-  color: #808080;
-}
-
-.dark-mode .shipping-form .save-btn {
-  background-color: #0056b3;
-  color: #ffffff;
-}
-
-.dark-mode .shipping-form .save-btn:hover {
-  background-color: #004494;
-}
-
-.dark-mode .shipping-form .close-btn {
-  background-color: #8b2029;
-  color: #e0e0e0;
-}
-
-.dark-mode .shipping-form .close-btn:hover {
-  background-color: #6b1820;
-}
-
-.dark-mode .row-8 label {
-    color: #e0e0e0;
-}
-
-.dark-mode .row-8 select {
-    background-color: #2c2c2c;
-    border-color: #404040;
-    color: #e0e0e0;
-}
-

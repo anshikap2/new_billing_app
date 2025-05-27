@@ -69,7 +69,7 @@ const CustomerViewForm = ({ customer, onClose }) => {
         <div className="view-header">
           <h2 className="view-title">Customer Details</h2>
           <div className="button-group">
-            <button className="print-button" onClick={handlePrint}>🖨️ Print</button>
+           
             <button className="close-button" onClick={onClose}>×</button>
           </div>
         </div>

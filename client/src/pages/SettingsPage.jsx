@@ -22,7 +22,6 @@ export default function SettingsPage({ onClose }) {
         {/* Theme Section */}
         <div className="settings-section">
           <h3>Theme</h3>
-
           <div className="toggle-container">
             <span>Dark Mode</span>
             <input
@@ -33,10 +32,8 @@ export default function SettingsPage({ onClose }) {
           </div>
         </div>
 
-        {/* Close Button */}
-        <button className="close-button" onClick={onClose}>
-          Close
-        </button>
+        {/* Close Icon */}
+        <div className="close-icon" onClick={onClose}></div>
       </div>
     </div>
   );

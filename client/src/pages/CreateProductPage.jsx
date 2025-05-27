@@ -80,7 +80,7 @@ export default function CreateProductPage() {
   };
   
   return (
-    <div className="create-product-container p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
+    <div className="create-product-container">
       <h2 className="text-2xl font-semibold text-center">Create Product</h2>
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
