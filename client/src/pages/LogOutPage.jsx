@@ -1,6 +1,7 @@
 import React from "react";
-import "../css/LogoutPage.css";
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import "../css/LogoutPage.css";
 
 const clearAuthData = () => {
   // Clear all auth-related data
@@ -31,11 +32,8 @@ const LogoutPage = ({ onLogout, onCancel }) => {
       onLogout();
     }
 
-    // Navigate to auth page after logout
-    setTimeout(() => {
-      navigate("/auth", { replace: true });
-      window.location.reload();
-    }, 100);
+    // Force navigation to home page
+    window.location.href = '/home';
   };
 
   return (

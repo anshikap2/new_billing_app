@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleLogin, handleSignup } from "../models/authModel";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../css/AuthForm.css';
 
 const AuthForm = () => {
@@ -45,17 +47,34 @@ const AuthForm = () => {
                 if (!success || !verifyAuthData()) {
                     throw new Error('Login failed or missing auth data');
                 }
+                toast.success('🎉 Successfully logged in!', {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    theme: "colored"
+                });
             } else {
                 const success = await handleSignup(userName, email, password, navigate, setMessage, setError);
                 if (success) {
+                    toast.success('✨ Account created successfully! Please login.', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        theme: "colored"
+                    });
                     setPassword("");
                     setUserName("");
                     setIsLogin(true);
-                    setMessage("Signup successful! Please login with your credentials.");
                 }
             }
         } catch (err) {
-            console.error('Auth error:', err);
+            toast.error(err?.message || "Authentication failed", {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "colored"
+            });
             setError(err?.message || "Authentication failed");
         } finally {
             setLoading(false); // Reset loading state
@@ -65,6 +84,7 @@ const AuthForm = () => {
 
     return ( 
         <div className="gradient-background">
+            <ToastContainer />
              <button
             className="auth-btn-back"
             type="button"

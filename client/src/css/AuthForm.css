@@ -153,4 +153,37 @@
     background-color: #0056b3;
 }
 
+/* Toast Notifications */
+.Toastify__toast {
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  min-height: 48px;
+}
+
+.Toastify__toast--success {
+  background: #4caf50;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+}
+
+.Toastify__toast--error {
+  background: #f44336;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.15);
+}
+
+.Toastify__toast-body {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 8px;
+}
+
+.Toastify__progress-bar {
+  height: 3px;
+}
+
+/* Toast animations */
+.Toastify__slide-enter--top-right {
+  animation-duration: 0.3s;
+}
+
 

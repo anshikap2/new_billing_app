@@ -94,7 +94,7 @@ axiosInstance.interceptors.response.use(null, async (error) => {
   return axiosInstance(config);
 });
 
-// Response interceptor with improved error handling
+// Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {
     // Clear timeout on success
@@ -121,28 +121,13 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    const { response, config } = error;
-
-    // Clear timeout on error
-    if (config?.timeoutId) {
-      clearTimeout(config.timeoutId);
-    }
-
-    // Network error handling
-    if (!response && error.request) {
-      console.error('Network Error:', {
-        code: error.code,
-        message: error.message,
-        url: config?.url,
-        timeout: config?.timeout
-      });
-    }
+    const { response } = error;
 
     // Handle authentication errors
     if (response?.status === 401) {
       console.warn('Auth: Token expired or invalid');
       localStorage.clear();
-      window.location.href = '/';
+      window.location.href = '/home'; // Force navigation to home
       return Promise.reject(new Error('Authentication required'));
     }
 
@@ -151,14 +136,14 @@ axiosInstance.interceptors.response.use(
       console.error('Server Error:', {
         status: response.status,
         data: response.data,
-        endpoint: config.url,
-        method: config.method,
+        endpoint: response.config.url,
+        method: response.config.method,
       });
     } else if (error.request) {
       console.error('Network Error: No response received', {
-        url: config?.url,
-        method: config?.method,
-        baseURL: config?.baseURL,
+        url: response.config?.url,
+        method: response.config?.method,
+        baseURL: response.config?.baseURL,
       });
     } else {
       console.error('Request Configuration Error:', error.message);
