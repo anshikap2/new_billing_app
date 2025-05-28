@@ -255,7 +255,10 @@ useEffect(() => {
         <button onClick={onClose} className="close-button" aria-label="Close">✕</button>
 
         {loading ? (
-          <div className="loading">Loading profile...</div>
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <p>Loading profile...</p>
+          </div>
         ) : error ? (
           <div className="error-message">{error}</div>
         ) : !user ? (
