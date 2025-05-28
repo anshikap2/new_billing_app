@@ -84,10 +84,15 @@
   
 .purchase-table {
     width: 100%;
+    min-width: 1000px; /* Increased to ensure horizontal scroll */
+    table-layout: fixed;
     border-collapse: collapse;
 }
   
 .purchase-table th, .purchase-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
@@ -106,6 +111,25 @@
 .purchase-table tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
+/* Column widths */
+.purchase-table th:nth-child(1),
+.purchase-table td:nth-child(1) { width: 15%; }
+
+.purchase-table th:nth-child(2),
+.purchase-table td:nth-child(2) { width: 20%; }
+
+.purchase-table th:nth-child(3),
+.purchase-table td:nth-child(3) { width: 15%; }
+
+.purchase-table th:nth-child(4),
+.purchase-table td:nth-child(4) { width: 15%; }
+
+.purchase-table th:nth-child(5),
+.purchase-table td:nth-child(5) { width: 20%; }
+
+.purchase-table th:last-child,
+.purchase-table td:last-child { width: 15%; }
   
 .purchase-delete-btn, .purchase-update-btn {
     cursor: pointer;
@@ -135,11 +159,19 @@
 }
 
 .pagination {
+    position: fixed;
+    bottom: 0;
+    left: 280px;
+    right: 0;
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #ddd;
+    z-index: 100;
+    width: calc(100% - 320px);
+    margin: 0 10px;
     display: flex;
     justify-content: center;
-    gap: 8px;
-    padding: 20px 0;
-    margin-top: 20px;
+    align-items: center;
 }
 
 .pagination-btn {
@@ -170,7 +202,12 @@
 .table-container {
     position: relative;
     width: 100%;
-    overflow: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    max-height: calc(100vh - 250px);
 }
 
 .spinner-overlay {
@@ -245,4 +282,89 @@
 .dark-mode .pagination-btn.active {
     background-color: #0056b3;
     border-color: #004494;
+}
+
+/* Scrollbar Styling */
+.table-container::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .purchase-container {
+        width: 100%;
+        left: 0;
+        padding: 10px;
+    }
+
+    .purchase-controls {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .purchase-search-bar {
+        max-width: 100%;
+        flex: 1;
+    }
+
+    .pagination {
+        width: calc(100% - 40px);
+        left: 0;
+        margin: 0 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .purchase-fixed-header {
+        padding: 10px;
+    }
+
+    .purchase-title {
+        font-size: 20px;
+    }
+
+    .purchase-table th,
+    .purchase-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .purchase-create-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .pagination {
+        padding: 10px;
+        margin: 0 10px;
+        width: calc(100% - 20px);
+    }
+
+    .pagination-btn {
+        min-width: 40px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .pagination span {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .pagination-btn {
+        min-width: 32px;
+        padding: 4px 6px;
+    }
 }

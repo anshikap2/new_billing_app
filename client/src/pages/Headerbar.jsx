@@ -12,8 +12,16 @@ const Headerbar = () => {
   const [showSettings, setShowSettings] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken"); // Remove token
-    window.location.href = "auth/login"; // Redirect to login
+    // Clear all auth data
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("username");
+    localStorage.removeItem("createdAt");
+    localStorage.removeItem("updatedAt");
+    
+    // Redirect to auth page with correct path
+    window.location.href = "/auth";
   };
   return (
     <header className="header">
@@ -21,7 +29,8 @@ const Headerbar = () => {
         <h1>My Billing App</h1>
       </div>
       <div className="header-right">
-       
+        <input type="text" placeholder="Search..." />
+        <FaSearch />
            {/* Profile Icon linked to profile page */}
           
            <div className="icon-container">

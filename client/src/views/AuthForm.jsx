@@ -11,27 +11,54 @@ const AuthForm = () => {
     const [userName, setUserName] = useState("");
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false); // Add loading state
     const navigate = useNavigate();
-
-    const toggleForm = () => setIsLogin(!isLogin);
 
     const clearForm = () => {
         setPassword("");
         setUserName("");
         setError("");
+        setMessage("");  // Add this to clear success message
+    };
+
+    const toggleForm = () => {
+        clearForm();  // Clear form when switching between login/signup
+        setIsLogin(!isLogin);
+    };
+
+    const verifyAuthData = () => {
+        const userId = localStorage.getItem('userId');
+        const token = localStorage.getItem('authToken');
+        console.log('Verifying auth data:', { userId, hasToken: !!token });
+        return userId && token;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isLogin) {
-            handleLogin(email, password, navigate, setError);
-        } else {
-            const success = await handleSignup(userName, email, password, navigate, setMessage, setError);
-            if (success) {
-                clearForm();
-                setIsLogin(true);
-                setMessage("Signup successful! Please login with your credentials.");
+        setError("");
+        setMessage("");
+        setLoading(true); // Set loading to true on submit
+        
+        try {
+            if (isLogin) {
+                const success = await handleLogin(email, password, navigate, setError, setLoading);
+                if (!success || !verifyAuthData()) {
+                    throw new Error('Login failed or missing auth data');
+                }
+            } else {
+                const success = await handleSignup(userName, email, password, navigate, setMessage, setError);
+                if (success) {
+                    setPassword("");
+                    setUserName("");
+                    setIsLogin(true);
+                    setMessage("Signup successful! Please login with your credentials.");
+                }
             }
+        } catch (err) {
+            console.error('Auth error:', err);
+            setError(err?.message || "Authentication failed");
+        } finally {
+            setLoading(false); // Reset loading state
         }
     };
     
@@ -65,7 +92,13 @@ const AuthForm = () => {
                     {error && <p className="error-message">{error}</p>}
                     {message && <p className="success-message">{message}</p>}
 
-                    <button className="auth-button" type="submit">{isLogin ? "Login" : "Signup"}</button>
+                    <button 
+                        className="auth-button" 
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? "Logging in..." : isLogin ? "Login" : "Signup"}
+                    </button>
                 </form>
 
                 <p className="auth-footer">

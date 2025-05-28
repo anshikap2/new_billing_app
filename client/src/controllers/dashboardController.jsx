@@ -10,6 +10,7 @@ import {
   fetchProfitTrend,
   fetchHighestProductSale,
 } from "../models/dashboardModel";
+import axiosInstance from '../utils/axiosConfig';
 
 export const useDashboardData = () => {
   const [totalInvoices, setTotalInvoices] = useState(10); // Static default

@@ -96,18 +96,53 @@
 
 /* Table Container */
 .report-table-container {
+  width: 100%;
   overflow-x: auto;
-  max-height: 400px;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 /* Report Table */
 .report-table {
   width: 100%;
+  min-width: 800px;
   border-collapse: collapse;
   font-size: 14px;
 }
+
+/* Scrollbar styling */
+.report-table-container::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.report-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.report-table-container::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 4px;
+}
+
+/* Column widths */
+.report-table th:nth-child(1),
+.report-table td:nth-child(1) { width: 15%; }
+
+.report-table th:nth-child(2),
+.report-table td:nth-child(2) { width: 25%; }
+
+.report-table th:nth-child(3),
+.report-table td:nth-child(3) { width: 20%; }
+
+.report-table th:nth-child(4),
+.report-table td:nth-child(4) { width: 20%; }
+
+.report-table th:last-child,
+.report-table td:last-child { width: 20%; }
 
 /* Table Header */
 .report-table thead {
@@ -407,4 +442,93 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1200px) {
+  .reports-container {
+    width: 100%;
+    left: 0;
+    padding: 10px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .left-content {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .report-controls {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .report-search-bar {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .report-search-bar input {
+    width: 100%;
+  }
+
+  .report-type-selector {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .report-type-select {
+    width: 100%;
+  }
+
+  .report-actions {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .download-btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .report-table {
+    font-size: 13px;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 8px;
+    min-width: 100px;
+  }
+
+  .pagination {
+    padding: 10px 0;
+  }
+
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .report-tabs {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .report-tabs button {
+    width: 100%;
+  }
+
+  .reports-title {
+    font-size: 20px;
+  }
 }

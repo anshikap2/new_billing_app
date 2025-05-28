@@ -805,3 +805,124 @@ background: #0056b3;
 .dark-mode .add-invoice-payment-summary p:last-child {
   color: #ff6b6b;
 }
+
+@media screen and (max-width: 1024px) {
+  .add-invoice-container {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .row-1, .row-2, .row-3, .row-4, .row-5, .row-6, .row-7, .row-8 {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .row-4, .row-8 {
+    width: 100%;
+  }
+
+  .add-invoice-payment-summary {
+    width: 100%;
+    max-width: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .invoice-section,
+  .invoice-customers-section,
+  .invoice-product-section,
+  .invoice-organization-section,
+  .invoice-payment-section,
+  .invoice-summary-section,
+  .invoice-discount-section {
+    padding: 10px;
+  }
+
+  .add-invoice-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .heading {
+    font-size: 20px;
+  }
+
+  .add-invoice-btn-add {
+    width: 100%;
+  }
+
+  .quantity-controls {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .add-invoice-container {
+    margin-top: 15px;
+    padding: 10px;
+  }
+
+  input, select {
+    padding: 6px;
+  }
+
+  .back-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Custom Scrollbar Styles */
+.add-invoice-container {
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #f0f0f0;
+}
+
+.add-invoice-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.add-invoice-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.add-invoice-container::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 4px;
+  border: 2px solid #f0f0f0;
+}
+
+.add-invoice-container::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
+
+/* Dark mode scrollbar */
+.dark-mode .add-invoice-container {
+  scrollbar-color: #66a3ff #2c2c2c;
+}
+
+.dark-mode .add-invoice-container::-webkit-scrollbar-track {
+  background: #2c2c2c;
+}
+
+.dark-mode .add-invoice-container::-webkit-scrollbar-thumb {
+  background: #66a3ff;
+  border-color: #2c2c2c;
+}
+
+.dark-mode .add-invoice-container::-webkit-scrollbar-thumb:hover {
+  background: #3385ff;
+}

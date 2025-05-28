@@ -168,68 +168,31 @@ export const fetchMonthlyRevenue = async () => {
 export const fetchProfitTrend = async () => {
   try {
     const token = getAuthToken();
-
-    if (!token) {
-      console.warn("⚠️ Warning: No auth token found!");
-      return null;
-    }
-
-    console.log("📤 Fetching profit trend data...");
-    console.log("🔗 API Endpoint:", `${API_BASE}/dashboard/profitTrend`);
-
     const response = await axiosInstance.get(`${API_BASE}/dashboard/profitTrend`, {
       headers: { 
         "ngrok-skip-browser-warning": "true",
         Authorization: `Bearer ${token}`
-      },
-    });
-
-    console.log("✅ Response received:", response.data);
-
-    if (!Array.isArray(response.data)) {
-      console.error("🚨 Unexpected response format:", response.data);
-      return null;
-    }
-
-    // 🔍 Debugging response structure
-    console.log("📊 Raw Profit Data:", response.data);
-
-    const labels = response.data.map(item => item.month);
-    const data = response.data.map(item => {
-      const profitValue = parseFloat(item.profit);
-      if (isNaN(profitValue)) {
-        console.warn(`⚠️ Warning: Invalid profit value for month ${item.month}:`, item.profit);
-        return 0;
       }
-      return profitValue;
     });
 
-    console.log("📅 Labels (Months):", labels);
-    console.log("💰 Profit Values:", data);
+    if (Array.isArray(response.data)) {
+      const labels = response.data.map(item => item.month);
+      const data = response.data.map(item => parseFloat(item.profit) || 0);
 
-    return {
-      labels,
-      datasets: [
-        {
-          label: "Profit Margin",
+      return {
+        labels,
+        datasets: [{
+          label: "Profit",
           data,
           borderColor: "#FF5733",
           backgroundColor: "rgba(255, 87, 51, 0.2)",
-          fill: true,
-        },
-      ],
-    };
-  } catch (error) {
-    console.error("❌ Error fetching profit trend:", error);
-
-    if (error.response) {
-      console.error("🛑 Server responded with:", error.response.status, error.response.data);
-    } else if (error.request) {
-      console.error("⏳ No response received. Request details:", error.request);
-    } else {
-      console.error("🔍 Request setup error:", error.message);
+          fill: true
+        }]
+      };
     }
-
+    return null;
+  } catch (error) {
+    console.error("Error fetching profit trend:", error);
     return null;
   }
 };

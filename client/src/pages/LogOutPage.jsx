@@ -2,29 +2,36 @@ import React from "react";
 import "../css/LogoutPage.css";
 import { useNavigate } from "react-router-dom";
 
+const clearAuthData = () => {
+  // Clear all auth-related data
+  const authKeys = [
+    'authToken', 'userId', 'userEmail', 'username',
+    'createdAt', 'updatedAt', 'user','userProfileImage' 
+  ];
+  
+  authKeys.forEach(key => {
+    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
+  });
+
+  // Clear cookies
+  document.cookie.split(";").forEach(cookie => {
+    const [name] = cookie.trim().split("=");
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
+  });
+};
+
 const LogoutPage = ({ onLogout, onCancel }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear all authentication-related data
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("authToken");
-    sessionStorage.removeItem("user");
+    clearAuthData();
     
-    // Clear any cookies related to authentication
-    document.cookie.split(";").forEach(cookie => {
-      const [name] = cookie.trim().split("=");
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;`;
-    });
-    
-    // Call the provided onLogout handler if it exists
     if (onLogout) {
       onLogout();
     }
-    
-    // Force a page reload before navigation to ensure all state is cleared
-    // This helps prevent issues with React's in-memory state
+
+    // Navigate to auth page after logout
     setTimeout(() => {
       navigate("/auth", { replace: true });
       window.location.reload();

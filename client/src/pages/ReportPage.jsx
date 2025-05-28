@@ -109,7 +109,8 @@ export default function ReportPage() {
         <table className="report-table">
           <thead>
             <tr>
-              <th>Organization ID</th>
+              
+              <th>Organization Name</th>
               <th>Total Invoices</th>
               <th>Total Invoiced Amount</th>
               <th>Total Tax Collected</th>
@@ -118,7 +119,8 @@ export default function ReportPage() {
           <tbody>
             {currentItems.map((row, index) => (
               <tr key={index}>
-                <td>{row.org_id}</td>
+               
+                <td>{row.org_name}</td>
                 <td>{row.total_invoices || 0}</td>
                 <td>{formatCurrency(row.total_invoiced_amount)}</td>
                 <td>{formatCurrency(row.total_tax_collected)}</td>

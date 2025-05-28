@@ -72,3 +72,81 @@ margin-top: 70px;
 .logout-link:hover {
   color: #bd2130;
 }
+
+/* Add hamburger menu button for mobile */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 10px;
+  z-index: 1000;
+  padding: 10px;
+  background: #141565;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .sidebar-toggle {
+    display: block;
+    z-index: 1001;
+  }
+
+  .content {
+    margin-left: 0;
+    width: 100%;
+    transition: margin-left 0.3s ease;
+  }
+
+  .content.sidebar-active {
+    margin-left: 200px;
+  }
+
+  .sidebar nav ul li {
+    padding: 12px 15px;
+  }
+
+  .sidebar nav ul li a {
+    font-size: 14px;
+  }
+
+  .sidebar svg {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .content.sidebar-active {
+    margin-left: 180px;
+  }
+
+  .sidebar nav ul li {
+    padding: 10px;
+  }
+
+  .sidebar nav ul li a {
+    font-size: 13px;
+  }
+
+  .sidebar svg {
+    font-size: 16px;
+  }
+}

@@ -72,3 +72,49 @@
   color: #808080;
 }
 
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 8px 12px;
+  }
+
+  .header-left h1 {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+
+  .header-right {
+    gap: 8px;
+  }
+
+  .header-right input {
+    width: 140px;
+    padding: 6px;
+  }
+
+  .header-right .profile,
+  .header-right .settings,
+  .header-right .logout {
+    padding: 6px;
+  }
+
+  .header-right svg {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .header-right input {
+    display: none;
+  }
+
+  .header-right {
+    gap: 5px;
+  }
+
+  .header-left h1 {
+    font-size: 18px;
+    margin-left: 5px;
+  }
+}
+

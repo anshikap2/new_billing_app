@@ -4,6 +4,13 @@ import axiosInstance from '../utils/axiosConfig';
 import { API_BASE } from "../config/config";
 import '../css/UserProfilePage.css';
 
+const modalRoot = document.createElement('div');
+modalRoot.id = 'modal-root';
+document.body.appendChild(modalRoot);
+
+// Base64 encoded default avatar - replace with your minimal default avatar
+const DEFAULT_AVATAR_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjgiIHI9IjQiIGZpbGw9IiNjY2MiLz48cGF0aCBkPSJNNCAxOWMwLTMuMzE0IDMuNTgyLTYgOC02czggMi42ODYgOCA2SDR6IiBmaWxsPSIjY2NjIi8+PC9zdmc+';
+
 const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
   const fileInputRef = useRef(null);
   const [user, setUser] = useState(null);
@@ -27,77 +34,54 @@ const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
   }, [profileImage]);
 
   const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-  
-    try {
-      const token = localStorage.getItem('authToken');
-      const userId = localStorage.getItem('userId');
-  
-      const formData = new FormData();
-      formData.append('user_id', userId);
-      formData.append('profile_image', file);
-  
-      // Show temporary preview
-      const previewUrl = URL.createObjectURL(file);
-      setImageSrc(previewUrl);
-  
-      const response = await axiosInstance.post(`${API_BASE}/auth/upload-image`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "true"
-        }
-      });
-  
-      console.log('Upload response:', response.data);
-  
-      if (response.status === 200 && response.data.success) {
-        console.log('Image uploaded successfully! Waiting to fetch updated profile...');
-  
-        // Wait for 1 second before fetching
-        await new Promise(resolve => setTimeout(resolve, 1000));
-  
-        const userResponse = await axiosInstance.get(`${API_BASE}/auth/userDetails`, {
-          params: { user_id: userId },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true"
-          }
-        });
-  
-        if (userResponse.data?.userExist?.[0]) {
-          const userData = userResponse.data.userExist[0];
-         
-          if (userData.profile_image) {
-            
-            const byteArray = new Uint8Array(userData.profile_image.data);
-            const blob = new Blob([byteArray], { type: 'image/jpeg' });
-  
-            // Important: Revoke old image
-            if (imageSrc) {
-              URL.revokeObjectURL(imageSrc);
-            }
-  
-            let serverImageUrl = URL.createObjectURL(blob);
-  
-            // Force no cache
-            serverImageUrl += `?t=${Date.now()}`;
-  
-            setImageSrc(serverImageUrl);
-            onImageUpdate?.(serverImageUrl);
-          }
-        }
-        setUploadError(null);
-      } else {
-        console.error('Upload failed:', response.data);
-        setUploadError('Failed to upload image');
+  const file = event.target.files[0];
+  if (!file) return;
+
+  let previewUrl = null;
+
+  try {
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
+
+    // Show temporary preview
+    previewUrl = URL.createObjectURL(file);
+    setImageSrc(previewUrl);
+
+    const formData = new FormData();
+    formData.append('profile_image', file);
+    formData.append('user_id', userId);
+
+    const response = await axiosInstance.post(`${API_BASE}/auth/upload-image`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true"
       }
-    } catch (error) {
-      console.error('Upload error:', error);
-      setUploadError('Failed to upload image');
+    });
+
+    // Check for different possible response formats
+    const imageUrl = response.data?.imageUrl || response.data?.url || response.data?.profile_image;
+    
+    if (imageUrl) {
+      const fullImageUrl = imageUrl.startsWith('http') ? imageUrl : `${API_BASE}${imageUrl}`;
+      setImageSrc(fullImageUrl);
+      onImageUpdate?.(fullImageUrl);
+      // Store the image URL in localStorage
+      localStorage.setItem('userProfileImage', fullImageUrl);
+      setUploadError(null);
+    } else {
+      throw new Error('Invalid response format from server');
     }
-  };
-  
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    setUploadError(error.response?.data?.message || error.message || 'Failed to upload image');
+    setImageSrc(null);
+  } finally {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+  }
+};
 
   // Close on escape key
   useEffect(() => {
@@ -108,99 +92,143 @@ const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
     return () => window.removeEventListener('keydown', handleEscape);
   }, [onClose]);
 
+  // Add debug logging for state changes
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      const token = localStorage.getItem('authToken');
-      const storedUserId = localStorage.getItem('userId');
-      const storedEmail = localStorage.getItem('userEmail');
-      const storedUsername = localStorage.getItem('username');
-      const storedCreatedAt = localStorage.getItem('createdAt');
-      const storedUpdatedAt = localStorage.getItem('updatedAt');
+    console.log('Auth State:', {
+      token: !!localStorage.getItem('authToken'),
+      userId: localStorage.getItem('userId'),
+      user: user,
+      error: error
+    });
+  }, [user, error]);
 
-      if (!token || !storedUserId) {
-        setError('Authentication required');
-        setLoading(false);
-        return;
-      }
-
-      // First set data from localStorage
-      const localUserData = {
-        user_id: storedUserId,
-        email: storedEmail,
-        username: storedUsername,
-        created_at: storedCreatedAt,
-        updated_at: storedUpdatedAt
-      };
-      setUser(localUserData);
-
-      // Then fetch fresh data from API
-      try {
-        console.log('Fetching fresh user data...');
-        const response = await axiosInstance.get(`${API_BASE}/auth/userDetails`, {
-          params: { user_id: storedUserId },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true"
-          }
-        });
-
-        if (response.data?.message === "User Details" && response.data?.userExist?.[0]) {
-          const userData = response.data.userExist[0];
-          console.log('Fresh user data received:', userData);
-          setUser(userData);
-          // Only try to set image if profile_image exists and is not null
-          if (userData.profile_image) {
-            try {
-              setImageSrc(userData.profile_image);
-            } catch (imageError) {
-              console.error('Error processing image:', imageError);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching fresh data:', error);
-        // Don't set error if we have local data
-        if (!localUserData.email) {
-          setError(error.response?.data?.message || 'Error fetching user data');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserDetails();
-    
-    // Cleanup function
-    return () => {
-      if (imageSrc) {
-        URL.revokeObjectURL(imageSrc);
-      }
-    };
-  }, []);  // Removed API_BASE and user_id from dependencies
-
-  // Check if modal root exists, if not create it
-  useEffect(() => {
-    let modalRoot = document.getElementById('modal-root');
-    if (!modalRoot) {
-      modalRoot = document.createElement('div');
-      modalRoot.id = 'modal-root';
-      document.body.appendChild(modalRoot);
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Error parsing JWT:', error);
+      return null;
     }
-    return () => {
-      if (modalRoot && !modalRoot.childNodes.length) {
-        document.body.removeChild(modalRoot);
+  };
+
+  const getUserIdFromToken = () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) return null;
+      
+      const decoded = parseJwt(token);
+      if (!decoded) return null;
+
+      // Try different possible user ID fields
+      return decoded.user_id || decoded.userId || decoded.id || decoded.sub;
+    } catch (error) {
+      console.error('Error getting user ID from token:', error);
+      return null;
+    }
+  };
+
+  const validateSession = () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const userId = localStorage.getItem('userId');
+      
+      if (!token || !userId) {
+        throw new Error('Missing credentials');
       }
-    };
-  }, []);
 
-  if (!isOpen) return null;
+      const decoded = parseJwt(token);
+      if (!decoded) {
+        throw new Error('Invalid token');
+      }
 
+      return { isValid: true, userId, token };
+    } catch (error) {
+      console.error('Session validation failed:', error);
+      return { isValid: false, error: error.message };
+    }
+  };
+
+  const checkAuth = () => {
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
+    console.log('Checking auth:', { hasToken: !!token, userId });
+    return { token, userId };
+  };
+
+  // Modified fetch user details logic
+useEffect(() => {
+  const fetchUserDetails = async (attempt = 0) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const { token, userId } = checkAuth();
+      if (!token || !userId) {
+        throw new Error('Please log in to view profile');
+      }
+
+      // Check localStorage first for cached image
+      const cachedImageUrl = localStorage.getItem('userProfileImage');
+      if (cachedImageUrl) {
+        setImageSrc(cachedImageUrl);
+      }
+
+      const response = await axiosInstance.get(`${API_BASE}/auth/userDetails`, {
+        params: { user_id: userId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true"
+        }
+      });
+
+      if (!response.data?.userExist?.[0]) {
+        throw new Error('User data not found');
+      }
+
+      const userData = response.data.userExist[0];
+      setUser(userData);
+      console.log('Profile loaded:', userData);
+
+      // Only update image if no cached image exists
+      if (!cachedImageUrl && userData.profile_image) {
+        const imageUrl = processImageUrl(userData.profile_image);
+        if (imageUrl) {
+          setImageSrc(imageUrl);
+          localStorage.setItem('userProfileImage', imageUrl);
+        }
+      }
+
+    } catch (error) {
+      console.error('Profile load error:', error);
+      setError(error.message);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (isOpen) {
+    console.log('Initializing profile load...');
+    fetchUserDetails();
+  }
+}, [isOpen]); // Only re-fetch when modal opens
+
+  // Update processImageUrl function
   const processImageUrl = (imageData) => {
-    if (!imageData) return null;
+    if (!imageData) {
+      return DEFAULT_AVATAR_BASE64;
+    }
     
     try {
       if (typeof imageData === 'string') {
-        if (imageData.startsWith('http') || imageData.startsWith('data:image')) {
+        if (imageData.startsWith('blob:') || 
+            imageData.startsWith('data:') ||
+            imageData.startsWith('http')) {
           return imageData;
         }
         return `${API_BASE}${imageData}`;
@@ -211,13 +239,15 @@ const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
         const blob = new Blob([byteArray], { type: 'image/jpeg' });
         return URL.createObjectURL(blob);
       }
+
+      return DEFAULT_AVATAR_BASE64;
     } catch (error) {
-      console.error('Error processing image URL:', error);
-      return null;
+      console.error('Error processing image:', error);
+      return DEFAULT_AVATAR_BASE64;
     }
-    
-    return null;
   };
+
+  if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <div className="profile-overlay">
@@ -244,11 +274,11 @@ const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
                   />
                   <img
                     src={processImageUrl(imageSrc)}
-                    alt="Profile"
+                    alt={user?.username || "Profile"}
                     className="profile-image"
                     onError={(e) => {
-                      console.error('Image failed to load:', e.target.src);
-                      e.target.src = null;
+                      console.warn('Image load failed:', e.target.src);
+                      e.target.src = DEFAULT_AVATAR_BASE64;
                       e.target.onerror = null;
                     }}
                   />
@@ -278,8 +308,48 @@ const ProfilePage = ({ isOpen, onClose, profileImage, onImageUpdate }) => {
         )}
       </div>
     </div>,
-    document.getElementById('modal-root')
+    modalRoot
   );
 };
 
-export default ProfilePage;
+// Enhanced error boundary
+class ProfileErrorBoundary extends React.Component {
+  state = { hasError: false, error: null, errorInfo: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Profile Error:', { error, errorInfo });
+    this.setState({ errorInfo });
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-container">
+          <h3>Profile Load Error</h3>
+          <p>{this.state.error?.message || 'Unknown error occurred'}</p>
+          <details>
+            <summary>Error Details</summary>
+            <pre>{this.state.errorInfo?.componentStack}</pre>
+          </details>
+          <button onClick={() => window.location.reload()}>
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export default function WrappedProfilePage(props) {
+  return (
+    <ProfileErrorBoundary>
+      <ProfilePage {...props} />
+    </ProfileErrorBoundary>
+  );
+}

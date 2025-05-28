@@ -31,11 +31,19 @@ import AddProject from "../pages/AddProject";
 import PurchasePage from "../pages/PurchasePage"
 import UpdatePurchasePage from "../pages/UpdatePurchasePage";
 import CreatePurchasePage from "../pages/CreatePurchasePage";
-import { useAuth } from '../context/AuthContext';
 
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken"));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsAuthenticated(!!localStorage.getItem("authToken"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <Routes>
@@ -90,8 +98,8 @@ const AppRoutes = () => {
         <Route path="report" element={<ReportPage />} />
       </Route>
 
-      {/* Catch all route */}
-      <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard/home" : "/auth"} replace />} />
+      {/* Redirect all unknown routes */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

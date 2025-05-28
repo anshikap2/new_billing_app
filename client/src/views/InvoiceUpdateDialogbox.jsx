@@ -69,7 +69,7 @@ const InvoiceUpdateDialogbox = ({ invoice, onClose, setInvoices }) => {
           </select>
           <div className="update-invoice-btn-group">
             <button className="update-invoice-btn-save" onClick={handleUpdate}>Update</button>
-            <button className="update-invoice-btn-cancel" onClick={onClose}>Cancel</button>
+            <button className="update-invoice-btn-cancel" onClick={onClose}>Back</button>
           </div>
         </div>
       </div>

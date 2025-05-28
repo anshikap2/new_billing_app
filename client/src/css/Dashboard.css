@@ -52,6 +52,8 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
 }
 
 /* Top Bar */
@@ -64,6 +66,8 @@
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .topbar input {
@@ -252,51 +256,42 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .dashboard-container {
-    flex-direction: column; /* Stack elements vertically */
-    margin-left: 0; /* Remove left margin */
-    padding: 10px; /* Reduce padding */
+    margin-left: 0;
+    padding: 10px;
   }
 
-  .sidebar {
-    width: 100%; /* Make sidebar full width */
-    margin-bottom: 20px; /* Add margin below sidebar */
+  .main-content {
+    padding: 10px;
   }
 
-  .stats-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust minmax */
+  .topbar {
+    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .charts-grid {
-    grid-template-columns: 1fr; /* Single column */
-    padding: 10px; /* Reduce padding */
+  .topbar input {
+    width: 100%;
   }
 
-  .charts-grid-2 {
-    grid-template-columns: 1fr; /* Single column */
+  .profile {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 5px;
   }
 
-  .chart-card {
-    min-height: 250px; /* Adjust min-height */
-  }
-
-  .transactions {
-    padding: 15px;
-  }
-
-  .transactions table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  .transactions th,
-  .transactions td {
+  .main-content {
     padding: 8px;
   }
 
-  .status-label {
-    padding: 2px 6px;
-    font-size: 0.8rem;
+  .topbar {
+    padding: 8px;
+    margin-bottom: 10px;
   }
 }
 

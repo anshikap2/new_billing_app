@@ -211,3 +211,64 @@
     content: "✓ ";
     font-weight: bold;
 }
+
+@media screen and (max-width: 1024px) {
+  .add-employee-container {
+    max-width: 95%;
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .add-employee-container {
+    padding: 15px;
+  }
+
+  .add-employee-container h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .employee-form {
+    gap: 15px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .submit-btn,
+  .reset-btn {
+    width: 100%;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .add-employee-container {
+    padding: 10px;
+  }
+
+  .success-message {
+    padding: 10px;
+    font-size: 13px;
+  }
+}

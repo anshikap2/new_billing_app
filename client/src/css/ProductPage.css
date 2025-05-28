@@ -82,19 +82,32 @@
     background: #0056b3;
   }
   
-  .product-table {
-    width: 100%;
-    border-collapse: collapse;
-  
-  }
-  
-  .product-table th, .product-table td {
+  .table-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.product-table {
+  width: 100%;
+  min-width: 800px; /* Ensures horizontal scroll on smaller screens */
+  border-collapse: collapse;
+}
+
+.product-table th, .product-table td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     text-align: left;
   }
   
   .product-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
     background-color: #007bff;
     font-weight: bold;
     color: white;
@@ -170,7 +183,8 @@
 .table-container {
   position: relative;
   width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .spinner-overlay {
@@ -248,4 +262,79 @@
 .dark-mode .pagination-btn.active {
   background-color: #1a75ff;
   color: white;
+}
+
+/* Scrollbar styling */
+.table-container::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 1024px) {
+  .product-container {
+    width: 100%;
+    left: 0;
+    padding: 10px;
+  }
+
+  .product-controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .product-search-bar {
+    max-width: 100%;
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .product-table th,
+  .product-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .Product-fixed-header {
+    padding: 10px;
+  }
+
+  .product-title {
+    font-size: 20px;
+  }
+
+  .product-create-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .product-delete-btn,
+  .product-update-btn {
+    padding: 4px;
+  }
+
+  .pagination {
+    gap: 4px;
+    padding: 10px 0;
+  }
+
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
 }
