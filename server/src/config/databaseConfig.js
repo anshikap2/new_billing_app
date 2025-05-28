@@ -13,7 +13,7 @@ const connectionPool = mysql.createPool({
   database: process.env.DB_NAME,       // your database name
   port: process.env.DB_PORT || 3306,   // default MySQL port
   waitForConnections: true,
-  connectionLimit: 3,
+  connectionLimit: 15,
   queueLimit: 0,
 }).promise();
 
