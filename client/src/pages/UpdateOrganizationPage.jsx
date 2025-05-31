@@ -10,51 +10,19 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
   const [logoFile, setLogoFile] = useState(null);
 
   useEffect(() => {
-    // Set default sample data if no organization data exists
-    if (!organization || Object.keys(organization).length === 0) {
-      setUpdatedOrg({
-        org_id: Date.now(), // Generate a temporary org_id
-        name: "ABC Corporation Pvt Ltd",
-        type: "Private Limited Company",
-        email: "info@abccorp.com",
-        phone: "9876543210",
-        address: "123, Business Park, Main Street",
-        website: "www.abccorp.com",
-        reg_number: "ABCDE1234F",
-        bank_name: "State Bank of India",
-        acc_name: "ABC Corporation Pvt Ltd",
-        acc_num: "1234567890123",
-        ifsc: "SBIN0123456",
-        branch: "Main Branch, City Center",
-        logo_image: "https://example.com/logo.png"
-      });
-
-      // Sample GST entries
-      setGstEntries([
-        {
-          stateCode: "MH",
-          gstNumber: "27ABCDE1234F1Z5",
-          lastInvoiceNumber: 0,
-          address: "Unit 1, Industrial Area, Mumbai - 400001, Maharashtra"
-        },
-        {
-          stateCode: "KA",
-          gstNumber: "29ABCDE1234F1Z1",
-          lastInvoiceNumber: 0,
-          address: "Plot No 45, Tech Park, Bangalore - 560001, Karnataka"
-        }
-      ]);
+    // Initialize with organization data or empty object
+    setUpdatedOrg(organization || {});
+    
+    if (organization?.gst_details) {
+      const gstArray = Object.entries(organization.gst_details).map(([stateCode, details]) => ({
+        stateCode,
+        gstNumber: details.gst_number,
+        lastInvoiceNumber: details.last_invoice_number,
+        address: details.address || ''
+      }));
+      setGstEntries(gstArray);
     } else {
-      setUpdatedOrg(organization);
-      if (organization?.gst_details) {
-        const gstArray = Object.entries(organization.gst_details).map(([stateCode, details]) => ({
-          stateCode,
-          gstNumber: details.gst_number,
-          lastInvoiceNumber: details.last_invoice_number,
-          address: details.address || ''
-        }));
-        setGstEntries(gstArray);
-      }
+      setGstEntries([]);
     }
   }, [organization]);
 
@@ -90,38 +58,53 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
     }
 
     try {
-      const formData = new FormData();
-      
-      Object.keys(updatedOrg).forEach((key) => {
-        if (updatedOrg[key] !== organization[key] && key !== 'gst_details' && key !== 'logo_preview') {
-          formData.append(key, updatedOrg[key]);
-        }
-      });
-
+      // Prepare GST details
       const gst_details = {};
       gstEntries.forEach(entry => {
         if (entry.stateCode && entry.gstNumber) {
           gst_details[entry.stateCode.toUpperCase()] = {
             gst_number: entry.gstNumber,
             last_invoice_number: parseInt(entry.lastInvoiceNumber || 0),
-            address: entry.address // Include address in GST details
+            address: entry.address || ''
           };
         }
       });
-      formData.append('gst_details', JSON.stringify(gst_details));
 
-      if (logoFile) {
-        formData.append('logo', logoFile);
-      }
+      // Prepare update payload with correct field names
+      const updatePayload = {
+        name: updatedOrg.name,
+        type: updatedOrg.type,
+        email: updatedOrg.email,
+        phone: updatedOrg.phone,
+        website: updatedOrg.website,
+        reg_number: updatedOrg.reg_number,
+        invoice_prefix: updatedOrg.invoice_prefix,
+        gst_details: gst_details,
+        logo_image: updatedOrg.logo_image,
+        bank_name: updatedOrg.bank_name,
+        acc_name: updatedOrg.acc_name,
+        ifsc: updatedOrg.ifsc,
+        branch: updatedOrg.branch,
+        acc_num: updatedOrg.acc_num
+      };
+
+      // Remove undefined/null values
+      Object.keys(updatePayload).forEach(key => {
+        if (updatePayload[key] === undefined || updatePayload[key] === null || updatePayload[key] === '') {
+          delete updatePayload[key];
+        }
+      });
+
+      console.log('Update payload:', updatePayload);
 
       const response = await axiosInstance({
         method: 'put',
         url: `${API_BASE}/organization/update`,
         params: { org_id: updatedOrg.org_id },
-        data: formData,
+        data: updatePayload,
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'true'
         }
       });
@@ -190,11 +173,6 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
               <input type="text" name="phone" value={updatedOrg.phone || ""} onChange={handleChange} />
             </div>
 
-            <div className="form-group full-width">
-              <label>Address</label>
-              <input type="text" name="address" value={updatedOrg.address || ""} onChange={handleChange} />
-            </div>
-
             <div className="form-group">
               <label>Website</label>
               <input type="text" name="website" value={updatedOrg.website || ""} onChange={handleChange} />
@@ -202,7 +180,12 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
 
             <div className="form-group">
               <label>Registration Number</label>
-              <input type="text" name="registrationNumber" value={updatedOrg.reg_number || ""} onChange={handleChange} />
+              <input type="text" name="reg_number" value={updatedOrg.reg_number || ""} onChange={handleChange} />
+            </div>
+
+            <div className="form-group">
+              <label>Invoice Prefix</label>
+              <input type="text" name="invoice_prefix" value={updatedOrg.invoice_prefix || ""} onChange={handleChange} placeholder="e.g., INV, ORG" />
             </div>
           </div>
 

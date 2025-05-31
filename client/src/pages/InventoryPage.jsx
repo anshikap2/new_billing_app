@@ -10,6 +10,8 @@ const InventoryPage = () => {
   const [error, setError] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [search, setSearch] = useState(""); // New state for search input
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Number of items per page
 
   // ✅ Wrap fetchProducts in useCallback to prevent unnecessary re-renders
   const fetchProducts = useCallback(async () => {
@@ -62,6 +64,21 @@ const InventoryPage = () => {
     setSelectedProduct(product);
   };
 
+  // Calculate pagination
+  const filteredProducts = products.filter(product =>
+    product.product_name.toLowerCase().includes(search.toLowerCase()) ||
+    product.sku.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="inventory-container">
       <section className="inventory-section">
@@ -107,8 +124,8 @@ const InventoryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.length > 0 ? (
-                    products.map((product) => (
+                  {currentItems.length > 0 ? (
+                    currentItems.map((product) => (
                       <tr key={product._id}>
                         <td>{product.product_name}</td>
                         <td>{product.sku}</td>
@@ -131,6 +148,43 @@ const InventoryPage = () => {
                 </tbody>
               </table>
             </div>
+            
+            {/* Simple Pagination UI */}
+            {totalPages > 1 && (
+              <div className="simple-pagination">
+                <span className="page-info">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <div className="pagination-controls">
+                  <button 
+                    className="control-btn"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    value={currentPage}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (value > 0 && value <= totalPages) {
+                        handlePageChange(value);
+                      }
+                    }}
+                    min="1"
+                    max={totalPages}
+                  />
+                  <button 
+                    className="control-btn"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </section>

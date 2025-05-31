@@ -25,9 +25,18 @@ const ExpensesGraphPage = ({ onClose, expenses }) => {
 
   // Process category-wise expenses
   const categoryExpenses = expenses.reduce((acc, expense) => {
-    const natureOfFund = Array.isArray(expense.natureOfFund) 
-      ? expense.natureOfFund[0] 
-      : (typeof expense.natureOfFund === 'object' ? expense.natureOfFund.type : expense.natureOfFund);
+    let natureOfFund = '';
+    
+    if (Array.isArray(expense.natureOfFund)) {
+      natureOfFund = expense.natureOfFund[0]?.type || expense.natureOfFund[0] || 'Other';
+    } else if (typeof expense.natureOfFund === 'object' && expense.natureOfFund !== null) {
+      natureOfFund = expense.natureOfFund.type || 'Other';
+    } else {
+      natureOfFund = expense.natureOfFund || 'Other';
+    }
+    
+    // Ensure we're not using [object Object] as a category
+    natureOfFund = typeof natureOfFund === 'object' ? 'Other' : natureOfFund;
     
     acc[natureOfFund] = (acc[natureOfFund] || 0) + Number(expense.debit || 0);
     return acc;
@@ -114,11 +123,36 @@ const ExpensesGraphPage = ({ onClose, expenses }) => {
                   data={categoryData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
-                  fill="#82ca9d"
+                  outerRadius={80}
+                  innerRadius={40}
+                  paddingAngle={5}
                   dataKey="amount"
-                  label={({ name, value }) => `${name}: ₹${value.toLocaleString()}`}
-                  labelLine={{ strokeWidth: 1 }}
+                  label={({
+                    cx,
+                    cy,
+                    midAngle,
+                    innerRadius,
+                    outerRadius,
+                    name,
+                    value
+                  }) => {
+                    const RADIAN = Math.PI / 180;
+                    const radius = outerRadius + 25;
+                    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                    
+                    return (
+                      <text
+                        x={x}
+                        y={y}
+                        textAnchor={x > cx ? 'start' : 'end'}
+                        dominantBaseline="central"
+                        fontSize="11px"
+                      >
+                        {`${name}: ₹${value.toLocaleString()}`}
+                      </text>
+                    );
+                  }}
                 >
                   {categoryData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -128,7 +162,12 @@ const ExpensesGraphPage = ({ onClose, expenses }) => {
                   formatter={(value) => `₹${value.toLocaleString()}`}
                   contentStyle={{ fontSize: '11px' }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px' }} />
+                <Legend 
+                  wrapperStyle={{ fontSize: '11px' }}
+                  layout="horizontal"
+                  verticalAlign="bottom"
+                  align="center"
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>

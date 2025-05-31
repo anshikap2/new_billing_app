@@ -65,7 +65,7 @@ export default function CreateProductPage() {
 
       if (response.status === 200 || response.status === 201) {
         alert("✅ Product created successfully!");
-        navigate("/product-page");
+        navigate("/dashboard/product-page");
       } else {
         setError("Failed to create product. Please try again.");
         console.log("Failed to create product, status code: ", response.status);

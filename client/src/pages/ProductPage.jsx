@@ -152,7 +152,7 @@ export default function ProductPage() {
         ))}
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          
           className="pagination-btn"
         >
           Next

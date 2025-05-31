@@ -259,6 +259,116 @@
     background-color: #0056b3;
 }
 
+/* Modern Pagination Styles */
+.modern-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 0;
+  margin-top: 16px;
+}
+
+.pagination-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 6px;
+  border: none;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(.disabled) {
+  background: #1890ff;
+  color: white;
+}
+
+.pagination-btn.active {
+  background: #1890ff;
+  color: white;
+  font-weight: 500;
+}
+
+.pagination-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-dots {
+  color: #666;
+  padding: 0 4px;
+}
+
+/* Simple Pagination Styles */
+.simple-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  background: #fff;
+  border-top: 1px solid #eee;
+  margin-top: auto;
+}
+
+.page-info {
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.pagination-controls input {
+  width: 50px;
+  height: 28px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.control-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ddd;
+  background: #f8f8f8;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #333;
+  font-weight: bold;
+}
+
+.control-btn:hover:not(:disabled) {
+  background: #e6e6e6;
+  border-color: #ccc;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .inventory-container {

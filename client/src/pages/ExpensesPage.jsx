@@ -163,16 +163,25 @@ const ExpensesPage = () => {
     (sum, exp) => sum + (Number(exp.credit) || 0),
     0
   );
+const displayNatureOfFund = (natureOfFund) => {
+  if (!natureOfFund) return "";
+  
+  try {
+    return Array.isArray(natureOfFund) 
+      ? natureOfFund.map(item => 
+          typeof item === 'object' ? item.type : String(item)
+        ).join(", ")
+      : typeof natureOfFund === 'object' 
+        ? natureOfFund.type || JSON.stringify(natureOfFund)
+        : String(natureOfFund);
+  } catch (e) {
+    console.warn("Error displaying natureOfFund:", e);
+    return String(natureOfFund);
+  }
+};
 
-  const displayNatureOfFund = (natureOfFund) => {
-    if (Array.isArray(natureOfFund)) {
-      return natureOfFund.join(", ");
-    } else if (typeof natureOfFund === "object" && natureOfFund !== null) {
-      return natureOfFund.type || "";
-    } else {
-      return natureOfFund || "";
-    }
-  };
+
+
 
   const resetFilters = () => {
     setProjectFilter("");

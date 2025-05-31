@@ -40,6 +40,19 @@ const getExpenses = async (limit, offset) => {
   limit = Number(limit);
   offset = Number(offset);
   const sqlQuery = `SELECT * FROM expenses ORDER BY expenseId LIMIT ${limit} OFFSET ${offset}`;
+
+  //updated code to fetch distinct value by name
+  /*
+  const sqlQuery = `SELECT e.*
+FROM expenses e
+JOIN (
+  SELECT employee, MIN(expenseId) AS minId
+  FROM expenses
+  GROUP BY employee
+) AS t ON e.employee = t.employee AND e.expenseId = t.minId
+ORDER BY e.expenseId
+LIMIT ${limit} OFFSET ${offset}`;
+  */
   try {
     const [res] = await connectionPool.execute(sqlQuery);
     return res;
