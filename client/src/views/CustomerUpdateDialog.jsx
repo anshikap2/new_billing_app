@@ -7,13 +7,16 @@ const CustomerUpdateDialog = ({ customer, onClose, setCustomers }) => {
   const [updatedCustomer, setUpdatedCustomer] = useState(() => {
     // Parse GST details if it exists
     let gstDetails = {};
-    if (customer.cust_gst_details) {
-      try {
-        gstDetails = JSON.parse(customer.cust_gst_details);
-      } catch (e) {
-        console.warn("Error parsing GST details");
+    try {
+      if (customer.cust_gst_details) {
+        gstDetails = typeof customer.cust_gst_details === 'string' 
+          ? JSON.parse(customer.cust_gst_details)
+          : customer.cust_gst_details;
       }
+    } catch (e) {
+      console.warn("Error parsing GST details:", e);
     }
+
     return {
       ...customer,
       gst_state: gstDetails.state_code || "",
