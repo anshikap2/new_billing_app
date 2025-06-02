@@ -326,6 +326,32 @@
   background: #096dd9;
 }
 
+.gst-input-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.gst-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: #2c3e50;
+}
+
+.gst-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.gst-input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+  outline: none;
+}
+
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
@@ -333,6 +359,55 @@
   
   .gst-entry-inputs {
     grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .gst-entry-card {
+    padding: 16px;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .gst-input-container {
+    width: 100%;
+  }
+
+  .gst-input-container input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .gst-address-input {
+    width: 100%;
+    min-height: 80px;
+    margin-bottom: 8px;
+  }
+
+  .remove-gst-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .gst-section {
+    padding: 16px;
+  }
+
+  .form-group input,
+  .bank-input,
+  .gst-address-input {
+    font-size: 16px; /* Better for mobile touch */
+    padding: 12px;
+  }
+
+  .gst-input-field {
+    min-width: 100%;
+  }
+  
+  .gst-input {
+    font-size: 16px;
+    padding: 12px;
   }
 }
 

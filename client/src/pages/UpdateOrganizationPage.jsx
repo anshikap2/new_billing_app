@@ -195,24 +195,30 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
               {gstEntries.map((entry, index) => (
                 <div key={index} className="gst-entry-card">
                   <div className="gst-entry-inputs">
-                    <div className="form-group">
-                      <label>State Code</label>
-                      <input
-                        type="text"
-                        placeholder="e.g., KA, MH"
-                        value={entry.stateCode}
-                        onChange={(e) => handleGstChange(index, 'stateCode', e.target.value.toUpperCase())}
-                        maxLength="2"
-                      />
+                    <div className="form-group gst-input-field">
+                      <label className="gst-label">State Code</label>
+                      <div className="gst-input-container">
+                        <input
+                          type="text"
+                          className="gst-input"
+                          placeholder="e.g., KA, MH"
+                          value={entry.stateCode}
+                          onChange={(e) => handleGstChange(index, 'stateCode', e.target.value.toUpperCase())}
+                          maxLength="2"
+                        />
+                      </div>
                     </div>
-                    <div className="form-group">
-                      <label>GST Number</label>
-                      <input
-                        type="text"
-                        placeholder="Enter GST Number"
-                        value={entry.gstNumber}
-                        onChange={(e) => handleGstChange(index, 'gstNumber', e.target.value)}
-                      />
+                    <div className="form-group gst-input-field">
+                      <label className="gst-label">GST Number</label>
+                      <div className="gst-input-container">
+                        <input
+                          type="text"
+                          className="gst-input"
+                          placeholder="Enter GST Number"
+                          value={entry.gstNumber}
+                          onChange={(e) => handleGstChange(index, 'gstNumber', e.target.value)}
+                        />
+                      </div>
                     </div>
                     <div className="form-group full-width">
                       <label>GST Address</label>

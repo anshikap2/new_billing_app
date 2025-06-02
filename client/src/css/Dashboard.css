@@ -1,5 +1,24 @@
 /* Dashboard.css */
 
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
 .dashboard-container {
   display: flex;
   min-height: 100vh; /* Changed from height to min-height */
@@ -51,9 +70,10 @@
 .main-content {
   flex: 1;
   padding: 20px;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   position: relative;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Top Bar */
@@ -202,7 +222,34 @@
   text-decoration: underline;
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 20px;
+  position: relative;
+  border-radius: 8px;
+  scrollbar-width: thin;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 4px !important;
+  width: 4px !important;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+  border-radius: 2px !important;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #888888 !important;
+  border-radius: 2px !important;
+}
+
 .transactions table {
+  min-width: 800px; /* Ensures table has minimum width */
   width: 100%;
   border-collapse: collapse;
 }
@@ -262,6 +309,9 @@
 
   .main-content {
     padding: 10px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100vh - 60px); /* Adjust based on your header height */
   }
 
   .topbar {
@@ -277,6 +327,13 @@
   .profile {
     text-align: center;
     width: 100%;
+  }
+
+  .table-wrapper {
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+    border-radius: 0;
+    overflow-x: visible;
   }
 }
 

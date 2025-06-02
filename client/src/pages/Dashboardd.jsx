@@ -221,6 +221,7 @@ export default function Dashboard() {
               View All
             </Link>
           </div>
+          <div class="table-wrapper">
           <table>
             <thead>
               <tr>
@@ -253,6 +254,7 @@ export default function Dashboard() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </main>
     </div>

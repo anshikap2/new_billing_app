@@ -374,6 +374,7 @@
     .inventory-container {
         width: 100vw;
         left: 0;
+        overflow-x: auto; /* Enable horizontal scroll on container */
     }
 
     .inventory-controls {
@@ -382,15 +383,22 @@
         align-items: stretch;
     }
 
-    .inventory-search-bar, .inventory-filter-dropdown, .inventory-create-btn {
-        width: 100%;
-        max-width: none;
-    }
-
     .inventory-search-section {
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
+    }
+
+    .inventory-search-bar, 
+    .inventory-filter-dropdown, 
+    .inventory-create-btn {
+        width: 100%;
+        max-width: none;
+    }
+
+    .inventory-table {
+        width: auto; /* Allow table to expand horizontally */
+        min-width: 768px; /* Ensure table is at least screen width */
     }
 }
 

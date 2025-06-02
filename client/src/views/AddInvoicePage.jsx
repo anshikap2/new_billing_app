@@ -989,53 +989,55 @@ export default function AddInvoicePage({ onClose }) {
         </div>
       </div>
 
-      <table className="add-invoice-table">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>SKU</th>
-            <th>HSN/SAC</th>
-            <th>Unit Price</th>
-            <th>Tax %</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoiceData.products.map((p, i) => {
-            const baseAmount = p.quantity * (p.unit_price || 0);
-            const tax = p.tax || 0;
-            const taxAmount =
-              invoiceData.gst_type === "IGST"
-                ? (baseAmount * tax) / 100 // Full tax for IGST
-                : (baseAmount * tax) / 100; // Split for CGST+SGST
-            const totalAmount = baseAmount + taxAmount;
+      <div className="add-invoice-table-wrapper">
+        <table className="add-invoice-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>SKU</th>
+              <th>HSN/SAC</th>
+              <th>Unit Price</th>
+              <th>Tax %</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoiceData.products.map((p, i) => {
+              const baseAmount = p.quantity * (p.unit_price || 0);
+              const tax = p.tax || 0;
+              const taxAmount =
+                invoiceData.gst_type === "IGST"
+                  ? (baseAmount * tax) / 100 // Full tax for IGST
+                  : (baseAmount * tax) / 100; // Split for CGST+SGST
+              const totalAmount = baseAmount + taxAmount;
 
-            return (
-              <tr key={i}>
-                <td>{p.product_name}</td>
-                <td>{p.quantity}</td>
-                <td>{p.sku}</td>
-                <td>{p.hsn_sac}</td>
-                <td>₹{(p.unit_price || 0).toFixed(2)}</td>
-                <td>{p.tax}%</td>
-                <td>₹{totalAmount.toFixed(2)}</td>
-                <td>{invoiceData.invoiceStatus || "N/A"}</td>
-                <td>
-                  <button
-                    onClick={() => removeProduct(i)}
-                    className="add-invoice-btn-remove"
-                  >
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={i}>
+                  <td>{p.product_name}</td>
+                  <td>{p.quantity}</td>
+                  <td>{p.sku}</td>
+                  <td>{p.hsn_sac}</td>
+                  <td>₹{(p.unit_price || 0).toFixed(2)}</td>
+                  <td>{p.tax}%</td>
+                  <td>₹{totalAmount.toFixed(2)}</td>
+                  <td>{invoiceData.invoiceStatus || "N/A"}</td>
+                  <td>
+                    <button
+                      onClick={() => removeProduct(i)}
+                      className="add-invoice-btn-remove"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       <div className="add-invoice-payment-summary">
         <h4>Summary</h4>

@@ -136,10 +136,11 @@ const OrganizationPage = () => {
                           onClick={() => toggleRowExpansion(org.org_id)}
                           className={`org-row ${expandedRow === org.org_id ? 'expanded' : ''}`}
                         >
-                          <td>{org.org_id || "N/A"}</td>
-                          <td className="org-name">{org.name || "N/A"}</td>
-                          <td>{org.type || "N/A"}</td>
-                          <td>{org.email || "N/A"}</td>
+                          
+                          <td className="org-cell">{org.org_id || "N/A"}</td>
+                          <td className="org-cell org-name">{org.name || "N/A"}</td>
+                          <td className="org-cell">{org.type || "N/A"}</td>
+                          <td className="org-cell">{org.email || "N/A"}</td>
                           <td className="actions-cell">
                             <div className=".org-action-buttons">
                               <button 

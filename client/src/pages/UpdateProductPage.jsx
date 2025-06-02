@@ -76,7 +76,7 @@ export default function UpdateProductPage({ product, onClose, setProducts }) {
   return (
     <div className="update-product-modal"> {/* Dark overlay */}
       <div className="update-product-wrapper"> {/* Modal container */}
-        <button className="update-product-close" onClick={onClose}>&times;</button>
+       
         <div className="update-product-title">Update Product</div>
         <div className="update-product-form">
           <label>Product Name</label>

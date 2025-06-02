@@ -359,11 +359,13 @@ input:disabled {
 }
 
 .invoice-discount-section {
-margin-bottom: 20px;
-padding: 15px;
-border-radius: 10px;
-background: #f9f9f9;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: calc(100% - 40px);
+  max-width: 1200px;
 }
 
 .invoice-discount-section h3 {
@@ -373,13 +375,16 @@ font-size: 20px;
 }
 
 .invoice-discount-section .row-4 {
-display: flex;
-gap: 20px;
-margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 
 .invoice-discount-section .row-4 > div {
-flex: 1;
+  width: 100%;
+  min-width: 0;
 }
 
 .invoice-discount-section label {
@@ -806,33 +811,39 @@ background: #0056b3;
   color: #ff6b6b;
 }
 
+@media screen and (max-width: 1200px) {
+  .add-invoice-container {
+    margin-left: 100px;
+    width: calc(100% - 120px);
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .add-invoice-container {
-    margin-left: 0;
-    width: 100%;
-    padding: 15px;
-  }
-
-  .row-1, .row-2, .row-3, .row-4, .row-5, .row-6, .row-7, .row-8 {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .row-4, .row-8 {
-    width: 100%;
-  }
-
-  .add-invoice-payment-summary {
-    width: 100%;
-    max-width: none;
+    margin-left: 20px;
+    width: calc(100% - 40px);
   }
 
   .form-grid {
     grid-template-columns: 1fr;
   }
+
+  .row-1, .row-2, .row-3, .row-4, .row-5, .row-6, .row-7, .row-8 {
+    flex-direction: column;
+  }
+
+  .add-invoice-payment-summary {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 768px) {
+  .add-invoice-container {
+    margin: 15px;
+    width: calc(100% - 30px);
+  }
+
   .invoice-section,
   .invoice-customers-section,
   .invoice-product-section,
@@ -840,47 +851,48 @@ background: #0056b3;
   .invoice-payment-section,
   .invoice-summary-section,
   .invoice-discount-section {
-    padding: 10px;
+    padding: 12px;
   }
 
   .add-invoice-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  .quantity-controls {
+    width: 100%;
   }
 
   .heading {
     font-size: 20px;
   }
 
-  .add-invoice-btn-add {
-    width: 100%;
+  .invoice-discount-section {
+    width: calc(100% - 30px);
+    margin: 15px auto;
+    padding: 15px;
   }
 
-  .quantity-controls {
-    width: 100%;
-    justify-content: center;
+  .invoice-discount-section .row-4 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .add-invoice-container {
-    margin-top: 15px;
-    padding: 10px;
-  }
-
-  input, select {
-    padding: 6px;
-  }
-
-  .back-button {
-    font-size: 14px;
-    padding: 6px 12px;
-  }
-
-  .address-grid {
+  .invoice-discount-section .row-4 {
     grid-template-columns: 1fr;
   }
+
+  .add-invoice-table {
+    min-width: 400px;
+  }
+}
+
+.add-invoice-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Custom Scrollbar Styles */
