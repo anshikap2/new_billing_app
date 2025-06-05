@@ -1,4 +1,4 @@
-import { usePurchaseController, deletePurchase } from "../controllers/prchasePageController";
+import { usePurchaseController } from "../controllers/prchasePageController";
 import { FaSearch, FaTrash, FaEdit } from "react-icons/fa";
 import Spinner from "../components/Spinner";
 import "../css/PurchasePage.css";
@@ -7,7 +7,15 @@ import React, { useState } from "react";
 import UpdatePurchasePage from "./UpdatePurchasePage";
 
 export default function PurchasePage() {
-  const { search, setSearch, filteredPurchases, setPurchases, fetchPurchases, loading: controllerLoading } = usePurchaseController();
+  const { 
+    search, 
+    setSearch, 
+    filteredPurchases, 
+    setPurchases, 
+    fetchPurchases, 
+    loading: controllerLoading,
+    deletePurchase 
+  } = usePurchaseController();
   const navigate = useNavigate();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,16 +39,8 @@ export default function PurchasePage() {
   const handleDelete = async (purchaseId) => {
     setLoading(true);
     try {
-      console.log("Attempting to delete purchase with ID:", purchaseId);
-      
-      // Make the delete API call
-      const deletedPurchase = await deletePurchase(purchaseId);
-      if (!deletedPurchase) return;
-      
-      console.log("Purchase deleted successfully:", deletedPurchase);
-      
-      // Reload the purchase list after deletion
-      fetchPurchases();
+      await deletePurchase(purchaseId);
+      console.log("Purchase deleted successfully");
     } catch (error) {
       console.error("Failed to delete purchase:", error);
     } finally {
@@ -49,7 +49,10 @@ export default function PurchasePage() {
   };
 
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+    const value = e.target.value;
+    setSearch(value);
+    // Reset to first page when searching
+    setCurrentPage(1);
   };
 
   const handleUpdate = (purchaseId) => {
@@ -71,6 +74,16 @@ export default function PurchasePage() {
     navigate("/dashboard/create-purchase");
   };
 
+  // Add date formatter function
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
   return (
     <div className="purchase-container">
       <div className="purchase-fixed-header">
@@ -81,7 +94,7 @@ export default function PurchasePage() {
           <div className="purchase-search-bar">
             <input
               type="text"
-              placeholder="Search Purchase"
+              placeholder="Search by expense number, supplier, status, or amount"
               value={search}
               onChange={handleSearchChange}
             />
@@ -118,7 +131,7 @@ export default function PurchasePage() {
                   >
                     <td>{purchase.expenses_number}</td>
                     <td>{purchase.supplier_name}</td>
-                    <td>{purchase.purchase_date}</td>
+                    <td>{formatDate(purchase.purchase_date)}</td>
                     <td>₹{parseFloat(purchase.total_amount).toFixed(2)}</td>
                     <td>
                       <span className={`status-badge ${purchase.payment_status.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -156,8 +169,8 @@ export default function PurchasePage() {
                             <h4>Purchase Information</h4>
                             <p><strong>Expenses Number:</strong> {purchase.expenses_number}</p>
                             <p><strong>Supplier:</strong> {purchase.supplier_name}</p>
-                            <p><strong>Purchase Date:</strong> {purchase.purchase_date}</p>
-                            <p><strong>Due Date:</strong> {purchase.due_date}</p>
+                            <p><strong>Purchase Date:</strong> {formatDate(purchase.purchase_date)}</p>
+                            <p><strong>Due Date:</strong> {formatDate(purchase.due_date)}</p>
                           </div>
 
                           <div className="detail-section">

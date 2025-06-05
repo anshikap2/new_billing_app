@@ -505,11 +505,7 @@ export default function AddInvoicePage({ onClose }) {
 
   return (
     <div className="add-invoice-container">
-      <div className="back-button-container">
-        <button onClick={handleBack} className="back-button">
-          ⬅ Back
-        </button>
-      </div>
+      
       <h2>ADD Invoice</h2>
       <div className="invoice-organization-section">
         <h3>Organization Details</h3>
@@ -820,6 +816,11 @@ export default function AddInvoicePage({ onClose }) {
                     >
                       Save Address
                     </button>
+                    
+        <button onClick={handleBack} className="back-button">
+          ⬅ Back
+        </button>
+    
                   </div>
                 </div>
               </div>
@@ -1090,7 +1091,10 @@ export default function AddInvoicePage({ onClose }) {
         <p>Due Amount: ₹{dueAmount.toFixed(2)}</p>
       </div>
 
-      <div className="save-button">
+      <div className="invoice-save-button">
+        <button onClick={handleBack} className="invoice-back-button">
+          ⬅ Back
+        </button>
         <button onClick={handleSaveInvoice} className="save-button">
           Save Invoice
         </button>

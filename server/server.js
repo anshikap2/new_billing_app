@@ -15,6 +15,7 @@ import reportsRouter from "./src/routes/reportRoutes.js";
 import expensesRouter from "./src/routes/expenseRoutes.js";
 import employeeRouter from "./src/routes/employeeRoutes.js";
 import projectRouter from "./src/routes/projectRoutes.js";
+import purchaseRoutes from "./src/routes/purchaseRoutes.js"; // Importing purchase routes
 
 const app = express();
 app.use(cors());
@@ -43,5 +44,6 @@ app.use('/api',reportsRouter);
 app.use('/exp',expensesRouter);
 app.use('/emp',employeeRouter);
 app.use('/proj',projectRouter);
+app.use('/purchase', purchaseRoutes);
 
 

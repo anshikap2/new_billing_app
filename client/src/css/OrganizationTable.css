@@ -109,11 +109,13 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 180px);
-  overflow: hidden;
+  height: auto;
+  min-height: 200px;
+  overflow: visible;
   padding: 0;
   background: white;
   border-radius: 8px;
+  margin-bottom: 60px;
 }
 
 /* Custom Scrollbar */
@@ -131,31 +133,27 @@
 }
 .org-table-container {
   flex-grow: 1;
-  min-height: 0;
-  height: calc(100vh - 260px); /* Adjusted to fit exactly 10 rows */
+  height: auto;
   position: relative;
   margin-top: 10px;
-  margin-bottom: 60px; /* Add space for pagination */
   background-color: white;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* org Table */
 .org-table {
   width: 100%;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: collapse;
+  margin-bottom: 80px;
 }
 
 .table-scroll-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
 }
 .org-table tbody tr:nth-child(even) {
   background-color: #f2f2f2;
@@ -288,7 +286,7 @@
   padding: 15px;
   background: white;
   border-top: 1px solid #ddd;
-  z-index: 100;
+  z-index: 1000;
   width: calc(100% - 320px);
   margin: 0 10px;
 }

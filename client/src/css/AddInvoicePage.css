@@ -175,16 +175,65 @@ transform: scale(0.95); /* Slight click effect */
 outline: 2px solid #ffcc00; /* Yellow focus outline for accessibility */
 }
 
-
-
-.save-button {
-display: flex;
-justify-content: center;
-align-items: center;
-margin-top: 20px;
+/* Additional Back Button Styles */
+.back-button {
+  position: relative;
+  padding: 8px 16px;
+  margin: 10px;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.save-button button {
+.back-button:hover {
+  background: linear-gradient(to right, #0056b3, #004094);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.back-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .back-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    margin: 8px;
+  }
+}
+
+.dark-mode .back-button {
+  background: linear-gradient(to right, #1a75ff, #0056b3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .back-button:hover {
+  background: linear-gradient(to right, #0056b3, #003d80);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.invoice-save-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;  /* Add gap between buttons */
+  margin-top: 20px;
+}
+
+.invoice-save-button button {
 background-color: #007bff; /* Blue primary color */
 color: white;
 font-size: 16px;
@@ -197,15 +246,15 @@ transition: none;
 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.save-button button:hover {
+.invoice-save-button button:hover {
 background-color: #0056b3; /* Darker blue */
 }
 
-.save-button button:active {
+.invoice-save-button button:active {
 transform: scale(0.98);
 }
 
-.save-button button:disabled {
+.invoice-save-button button:disabled {
 background-color: #cccccc;
 cursor: not-allowed;
 }
@@ -228,9 +277,11 @@ input:disabled {
   border-radius: 5px;
   cursor: pointer;
   align-items: center;
-  width: 10%;
+  width: auto;  /* Changed from 10% to auto */
+  min-width: 120px;  /* Added min-width */
   font-size: 12px;
-  margin-top: 10px;
+  margin: 10px auto;  /* Changed margin to center the button */
+  display: block;  /* Added display block */
 }
 
 .add-invoice-btn-add:hover {
@@ -288,6 +339,29 @@ input:disabled {
   .add-invoice-table th, 
   .add-invoice-table td {
     padding: 8px;
+  }
+  .add-invoice-btn-add {
+    width: auto;
+    min-width: 120px;
+    margin: 10px auto;
+    padding: 8px 15px;
+    text-align: center;
+    display: block;
+  }
+
+  .quantity-input-container {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .quantity-controls {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .stock-info-container {
+    text-align: center;
+    width: 100%;
   }
 }
 .add-invoice-payment-summary {
@@ -508,6 +582,7 @@ background: #0056b3;
   align-items: center;
   gap: 4px;
   width: 100%;
+  text-align: center;
 }
 
 .quantity-controls {
@@ -877,6 +952,30 @@ background: #0056b3;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
+
+  .quantity-input-container {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .quantity-controls {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .stock-info-container {
+    text-align: center;
+    width: 100%;
+  }
+
+  .add-invoice-btn-add {
+    width: auto;
+    min-width: 120px;
+    margin: 10px auto;
+    padding: 8px 15px;
+    text-align: center;
+    display: block;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -937,4 +1036,79 @@ background: #0056b3;
 
 .dark-mode .add-invoice-container::-webkit-scrollbar-thumb:hover {
   background: #3385ff;
+}
+
+.back-button {
+  background: #6c757d;
+  color: #ffffff;  /* White text color */
+  border: none;
+  padding: 8px 15px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5a6268; /* Darker gray on hover */
+}
+
+.back-button:active {
+  transform: scale(0.95); /* Slight click effect */
+}
+
+.back-button:focus {
+  outline: 2px solid #ffcc00; /* Yellow focus outline for accessibility */
+}
+
+/* Additional Back Button Styles */
+.invoice-back-button {
+  position: relative;
+  padding: 8px 16px;
+  margin: 10px;
+  background: linear-gradient(to right, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.invoiceback-button:hover {
+  background: linear-gradient(to right, #0056b3, #004094);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.invoice-back-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .back-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    margin: 8px;
+  }
+}
+
+.dark-mode .invoice-back-button {
+  background: linear-gradient(to right, #1a75ff, #0056b3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .invoice-back-button:hover {
+  background: linear-gradient(to right, #0056b3, #003d80);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from '../utils/axiosConfig';
 import "../css/PurchasePage.css";
-import { API_BASE } from "../config/config";
 import { useNavigate } from "react-router-dom";
 
 const CreatePurchasePage = () => {
@@ -111,63 +110,52 @@ const CreatePurchasePage = () => {
       const token = localStorage.getItem("authToken");
       if (!token) throw new Error("Authentication token not found");
 
-      // Debug the complete data structure before sending
+
+      const userId = localStorage.getItem("userId"); // Add user_id from storage
+
       const dataToSend = {
+        purchase_id: Date.now(),
         expenses_number: formData.expenses_number,
         supplier_name: formData.supplier_name,
         purchase_date: formData.purchase_date,
         due_date: formData.due_date,
-        total_amount: formData.total_amount,
+        total_amount: parseFloat(formData.total_amount),
         payment_status: formData.payment_status,
-        items_count: formData.items_count,
+        items_count: parseInt(formData.items_count),
         notes: formData.notes || "",
-        items: formData.items,
-        created_at: formData.created_at
+        items: formData.items.map(item => ({
+          item_name: item.item_name,
+          quantity: parseInt(item.quantity),
+          price: parseFloat(item.price),
+          total: parseFloat(item.total)
+        }))
       };
 
-      console.log("📦 Complete data structure:", JSON.stringify(dataToSend, null, 2));
-
       const response = await axiosInstance.post(
-        `${API_BASE}/purchase/create`,
+        `/purchase/purchases?user_id=${userId}`,
         dataToSend,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-          timeout: 30000, // 30 second timeout
+            Authorization: `Bearer ${token}`
+          }
         }
       );
 
-      console.log("📥 Full API Response:", {
-        status: response.status,
-        statusText: response.statusText,
-        data: response.data,
-        headers: response.headers
-      });
-
-      // Check if response has data and success status
-      if (response.data && (response.status === 200 || response.status === 201)) {
+      if (response.data) {
         console.log("✅ Purchase Added Successfully:", response.data);
-        // Navigate first, then show alert
         navigate("/dashboard/purchase-page");
         alert("Purchase added successfully!");
-      } else {
-        throw new Error("Invalid response from server");
       }
 
     } catch (err) {
       console.error("🚫 Detailed submission error:", {
         message: err.message,
         response: err.response?.data,
-        status: err.response?.status,
-        headers: err.response?.headers
+        status: err.response?.status
       });
       
-      let errorMessage = err.response?.data?.message || err.message || "Failed to add purchase";
-      setError(errorMessage);
-      alert(`Error: ${errorMessage}`);
+      setError(err.response?.data?.message || "Failed to add purchase. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
