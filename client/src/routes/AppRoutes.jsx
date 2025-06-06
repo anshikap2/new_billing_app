@@ -3,34 +3,38 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import AuthForm from "../views/AuthForm";
 import Homepage from "../views/Homepage";
 import DashboardLayout from "../pages/DashboardLayout";
-import CustomerList from "../views/CustomerList";
-import CustomerForm from "../views/CustomerForm";
-import CustomerViewForm from "../views/CustomerViewForm";
-import CustomerUpdateDialog from "../views/CustomerUpdateDialog";
-import InvoiceTable from "../views/InvoiceTable";
-import InvoiceUpdateDialogbox from "../views/InvoiceUpdateDialogbox";
-import Dashboardd from "../pages/Dashboardd";
-import AddInvoicePage from "../views/AddInvoicePage";
-import InvoicePdf from "../pages/InvoicePdf";
-import ProductPage from "../pages/ProductPage";
-import CreateProductPage from "../pages/CreateProductPage";
-import UpdateProductPage from "../pages/UpdateProductPage";
-import InventoryPage from "../pages/InventoryPage";
-import ExpensesPage from "../pages/ExpensesPage";
+import CustomerList from "../pages/customer/CustomerList";
+import CustomerForm from "../pages/customer/CustomerForm";
+import CustomerViewForm from "../pages/customer/CustomerViewForm";
+import CustomerUpdateDialog from "../pages/customer/CustomerUpdateDialog";
+import InvoiceTable from "../pages/Invoice/InvoiceTable";
+import InvoiceUpdateDialogbox from "../pages/Invoice/InvoiceUpdateDialogbox";
+import Dashboardd from "../pages/dashboard/Dashboardd";
+import AddInvoicePage from "../pages/Invoice/AddInvoicePage";
+import InvoicePdf from "../pages/Invoice/InvoicePdf";
+import ProductPage from "../pages/product/ProductPage";
+import CreateProductPage from "../pages/product/CreateProductPage";
+import UpdateProductPage from "../pages/product/UpdateProductPage";
+import InventoryPage from "../pages/inventory/InventoryPage";
+import ExpensesPage from "../pages/expenses/ExpensesPage";
 import ProtectedRoutes from "./ProtectedRoutes";
-import OrganizationPage from "../pages/OrganizationPage";
-import ExpensesGraphPage from "../pages/ExpensesGraphPage";
+import OrganizationPage from "../pages/organization/OrganizationPage";
+import ExpensesGraphPage from "../pages/expenses/ExpensesGraphPage";
 import UserProfilePage from "../pages/UserProfilePage";
-import AddOrganizationPage from "../pages/AddOragnizationPage";
-import UpdateOrganizationPage from "../pages/UpdateOrganizationPage";
-import ReportPage from "../pages/ReportPage";
-import CreateExpensePage from "../pages/CreateExpensePage";
-import UpdateExpensePage from "../pages/UpdateExpensePage";
-import AddEmployee from "../pages/AddEmployee";
-import AddProject from "../pages/AddProject";
-import PurchasePage from "../pages/PurchasePage"
-import UpdatePurchasePage from "../pages/UpdatePurchasePage";
-import CreatePurchasePage from "../pages/CreatePurchasePage";
+import AddOrganizationPage from "../pages/organization/AddOragnizationPage";
+import UpdateOrganizationPage from "../pages/organization/UpdateOrganizationPage";
+import ReportPage from "../pages/report/ReportPage";
+import CreateExpensePage from "../pages/expenses/CreateExpensePage";
+import UpdateExpensePage from "../pages/expenses/UpdateExpensePage";
+import AddEmployee from "../pages/employee/AddEmployee";
+import AddProject from "../pages/project/AddProject";
+import PurchasePage from "../pages/purchase/PurchasePage"
+import UpdatePurchasePage from "../pages/purchase/UpdatePurchasePage";
+import CreatePurchasePage from "../pages/purchase/CreatePurchasePage";
+import ProjectPage from "../pages/project/ProjectPage";
+import EmployeePage from "../pages/employee/EmployeePage";
+import ProjectUpdate from "../pages/project/ProjectUpdate";
+import EmployeeUpdate from "../pages/employee/EmployeeUpdate";
 
 
 const AppRoutes = () => {
@@ -96,6 +100,10 @@ const AppRoutes = () => {
         <Route path="create-purchase" element={<CreatePurchasePage />} />
         <Route path="update-purchase" element={<UpdatePurchasePage />} />
         <Route path="report" element={<ReportPage />} />
+        <Route path="project" element={<ProjectPage />} />
+        <Route path="employee" element={<EmployeePage />} />
+        <Route path="update-project/:projectId" element={<ProjectUpdate />} />
+        <Route path="update-employee/:employeeId" element={<EmployeeUpdate />} />
       </Route>
 
       {/* Redirect all unknown routes */}

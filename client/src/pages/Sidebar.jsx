@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { FaHome, FaFileInvoiceDollar, FaShoppingCart, FaUser, FaSignOutAlt, FaUsers, FaChartBar, FaBoxOpen, FaMoneyBillWave, FaBuilding, FaBars } from "react-icons/fa";
+import { FaHome, FaFileInvoiceDollar, FaShoppingCart, FaUser, FaSignOutAlt, FaUsers, FaChartBar, FaBoxOpen, FaMoneyBillWave, FaBuilding, FaBars, FaUserTie, FaTasks } from "react-icons/fa";
 import "../css/Sidebar.css";
 import { MdInventory } from 'react-icons/md';
 
@@ -47,6 +47,8 @@ const Sidebar = () => {
             <li><Link onClick={handleLinkClick} to="/dashboard/purchase-page"><FaShoppingCart/> Purchase</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/organization-page"><FaBuilding /> Organization</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/expenses-page"><FaMoneyBillWave /> Expenses</Link></li>
+            <li><Link onClick={handleLinkClick} to="/dashboard/employee"><FaUserTie /> Employee</Link></li>
+            <li><Link onClick={handleLinkClick} to="/dashboard/project"><FaTasks /> Project</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/report"><FaChartBar /> Reports</Link></li>
           </ul>
         </nav>
