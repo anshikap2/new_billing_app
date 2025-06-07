@@ -184,24 +184,29 @@ const OrganizationPage = () => {
                                   <h4>GST Information</h4>
                                   {org.gst_details && Object.entries(org.gst_details).map(([state, details]) => (
                                     <div key={state} className="gst-detail">
-                                      
                                       <p><strong>{state}:</strong> {details.gst_number}</p>
                                       <p className="gst-address">{details.address}</p>
                                     </div>
                                   ))}
                                 </div>
 
-                                {org.logo_image && (
-                                  <div className="detail-section">
-                                    <h4>Organization Logo</h4>
-                                    <img src={org.logo_image} alt={`${org.name} logo`} className="org-logo-large" />
-                                  </div>
-                                )}
-
-                                {org.signature_image && (
-                                  <div className="detail-section">
-                                    <h4>Authorized Signature</h4>
-                                    <img src={org.signature_image} alt={`${org.name} signature`} className="org-signature-large" />
+                                {(org.logo_image || org.signature_image) && (
+                                  <div className="detail-section images-section">
+                                    <h4>Organization Images</h4>
+                                    <div className="images-container">
+                                      {org.logo_image && (
+                                        <div className="image-item">
+                                          <strong>Logo:</strong>
+                                          <img src={org.logo_image} alt={`${org.name} logo`} className="org-image" />
+                                        </div>
+                                      )}
+                                      {org.signature_image && (
+                                        <div className="image-item">
+                                          <strong>Signature:</strong>
+                                          <img src={org.signature_image} alt={`${org.name} signature`} className="org-image" />
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
                                 )}
                               </div>
