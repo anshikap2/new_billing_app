@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import axiosInstance from '../utils/axiosConfig';
-import { API_BASE } from "../config/config";
-import '../css/UserProfilePage.css';
+import axiosInstance from '../../utils/axiosConfig';
+import { API_BASE } from "../../config/config";
+import '../../css/UserProfilePage.css';
 
 const modalRoot = document.createElement('div');
 modalRoot.id = 'modal-root';

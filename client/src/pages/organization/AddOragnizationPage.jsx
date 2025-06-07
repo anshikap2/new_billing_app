@@ -27,6 +27,9 @@ const AddOrganizationPage = ({ onClose }) => {
   // Separate state for logoFile
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+
+  const [signatureFile, setSignatureFile] = useState(null);
+  const [signaturePreview, setSignaturePreview] = useState(null);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -67,6 +70,30 @@ const AddOrganizationPage = ({ onClose }) => {
       setLogoFile(newFile);
       const previewUrl = URL.createObjectURL(newFile);
       setLogoPreview(previewUrl);
+    }
+  };
+
+  const handleSignatureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file type
+      if (!file.type.match('image.*')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      // Check file size (300KB limit for signature)
+      if (file.size > 300 * 1024) {
+        alert('Signature file size should be less than 300KB');
+        return;
+      }
+
+      const cleanFileName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+      const newFile = new File([file], cleanFileName, { type: file.type });
+      
+      setSignatureFile(newFile);
+      const previewUrl = URL.createObjectURL(newFile);
+      setSignaturePreview(previewUrl);
     }
   };
 
@@ -152,6 +179,7 @@ const AddOrganizationPage = ({ onClose }) => {
         phone: formData.phone,
         website: formData.website || "",
         reg_number: formData.registrationNumber,
+        pan_number: formData.panNumber || "",
         invoice_prefix: formData.invoicePrefix || "",
         gst_details: formData.gstEntries.reduce((acc, entry) => {
           if (entry.stateCode && entry.gstNumber) {
@@ -185,6 +213,19 @@ const AddOrganizationPage = ({ onClose }) => {
           name: logoEntry?.name,
           type: logoEntry?.type,
           size: logoEntry?.size,
+        });
+      }
+
+      // Add signature file to form data
+      if (signatureFile) {
+        formDataToSend.append("signature_image", signatureFile);
+        // Verify signature_image was added
+        const signatureEntry = formDataToSend.get("signature_image");
+        console.log("🔍 Verifying signature_image in FormData:", {
+          added: !!signatureEntry,
+          name: signatureEntry?.name,
+          type: signatureEntry?.type,
+          size: signatureEntry?.size,
         });
       }
 
@@ -302,6 +343,31 @@ const AddOrganizationPage = ({ onClose }) => {
     </div>
   );
 
+  const signatureSection = (
+    <div className="input-field full-width signature-upload">
+      <label>Signature Image</label>
+      <input
+        type="file"
+        name="signatureImage"
+        onChange={handleSignatureChange}
+        accept="image/*"
+      />
+      {signaturePreview && (
+        <div className="signature-preview">
+          <img
+            src={signaturePreview}
+            alt="Signature preview"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              console.warn('Failed to load signature image');
+            }}
+            style={{ maxWidth: '200px', marginTop: '10px' }}
+          />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="organization-container">
       <h2>Add New Organization</h2>
@@ -394,6 +460,20 @@ const AddOrganizationPage = ({ onClose }) => {
                 </div>
 
                 <div className="input-field">
+                  <label>PAN Number <span className="optional">(Optional)</span></label>
+                  <input
+                    type="text"
+                    name="panNumber"
+                    value={formData.panNumber || ""}
+                    onChange={handleChange}
+                    placeholder="Enter PAN number"
+                    maxLength="10"
+                    style={{ textTransform: 'uppercase' }}
+                  />
+                  {validationErrors.panNumber && <p className="error">{validationErrors.panNumber}</p>}
+                </div>
+
+                <div className="input-field">
                   <label>
                     Invoice Prefix <span className="optional">(Optional)</span>
                     <span className="tooltip-icon" title="This prefix will be added before invoice numbers">ℹ️</span>
@@ -412,6 +492,7 @@ const AddOrganizationPage = ({ onClose }) => {
                 </div>
 
                 {logoSection}
+                {signatureSection}
               </div>
             </div>
 

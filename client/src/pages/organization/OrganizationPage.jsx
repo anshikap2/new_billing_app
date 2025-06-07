@@ -17,6 +17,7 @@ const OrganizationPage = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedorgId, setSelectedorgId] = useState(null);
   const [expandedRow, setExpandedRow] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -53,7 +54,7 @@ const OrganizationPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [page, refreshTrigger]);
 
   useEffect(() => {
     setFilteredOrganizations(
@@ -72,6 +73,7 @@ const OrganizationPage = () => {
   // Function to close the update dialog
   const closeDialog = () => {
     setIsDialogOpen(false);
+    setRefreshTrigger(prev => prev + 1);
   };
 
   const toggleRowExpansion = (orgId) => {
@@ -175,12 +177,14 @@ const OrganizationPage = () => {
                                   <p><strong>Phone:</strong> {org.phone || "N/A"}</p>
                                   <p><strong>Website:</strong> {org.website || "N/A"}</p>
                                   <p><strong>Registration:</strong> {org.reg_number || "N/A"}</p>
+                                  <p><strong>PAN:</strong> {org.pan_number || "N/A"}</p>
                                 </div>
                                 
                                 <div className="detail-section">
                                   <h4>GST Information</h4>
                                   {org.gst_details && Object.entries(org.gst_details).map(([state, details]) => (
                                     <div key={state} className="gst-detail">
+                                      
                                       <p><strong>{state}:</strong> {details.gst_number}</p>
                                       <p className="gst-address">{details.address}</p>
                                     </div>
@@ -191,6 +195,13 @@ const OrganizationPage = () => {
                                   <div className="detail-section">
                                     <h4>Organization Logo</h4>
                                     <img src={org.logo_image} alt={`${org.name} logo`} className="org-logo-large" />
+                                  </div>
+                                )}
+
+                                {org.signature_image && (
+                                  <div className="detail-section">
+                                    <h4>Authorized Signature</h4>
+                                    <img src={org.signature_image} alt={`${org.name} signature`} className="org-signature-large" />
                                   </div>
                                 )}
                               </div>

@@ -67,7 +67,7 @@ const AddProject = () => {
 
         // Optionally redirect after success
         setTimeout(() => {
-          navigate('/dashboard/expenses-page');
+          navigate('/dashboard/project-page');
         }, 2000);
       } else {
         throw new Error("Unexpected response from the server.");
@@ -236,7 +236,7 @@ const AddProject = () => {
         
         <div className="form-actions">
           <button type="submit" className="submit-btn">Add Project</button>
-           <button type="button" className="reset-btn" onClick={() => navigate('/dashboard/expenses-page')}>
+           <button type="button" className="reset-btn" onClick={() => navigate('/dashboard/project-page')}>
             Back
           </button>
         </div>

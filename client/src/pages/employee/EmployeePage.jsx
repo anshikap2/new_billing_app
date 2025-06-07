@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getEmployees, deleteEmployee } from '../../controllers/employeeController';
+import Spinner from '../../components/Spinner';
 import "../../css/EmployeePage.css";
 
 const EmployeePage = () => {
@@ -77,7 +78,7 @@ const EmployeePage = () => {
      
 
       {loading ? (
-        <div className="loading">Loading employees...</div>
+        <Spinner />
       ) : error ? (
         <div className="error">{error}</div>
       ) : (

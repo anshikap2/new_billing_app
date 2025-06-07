@@ -3,6 +3,7 @@ import { FaEdit, FaTrash, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getProjects, deleteProject } from '../../controllers/projectController';
 import ProjectUpdate from './ProjectUpdate';
+import Spinner from '../../components/Spinner';
 import "../../css/ProjectPage.css";
 
 const ProjectPage = () => {
@@ -11,7 +12,7 @@ const ProjectPage = () => {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -93,15 +94,13 @@ const ProjectPage = () => {
       </div>
       </div>
 
-      
-
       {loading ? (
-        <div className="loading">Loading projects...</div>
+        <Spinner />
       ) : error ? (
         <div className="error">{error}</div>
       ) : (
-        <div className="project-table">
-          <table>
+        <div className="table-container">
+          <table className="project-table">
             <thead>
               <tr>
                 <th>Project Name</th>

@@ -89,9 +89,36 @@ const deleteExpense = async (expenseId) => {
   return result;
 };
 
+const getExpenseById = async (expenseId) => {
+  const sqlQuery = 'SELECT * FROM expenses WHERE expenseId = ?';
+  const [rows] = await connectionPool.execute(sqlQuery, [expenseId]);
+  
+  if (rows.length === 0) {
+    return null;
+  }
+
+  const expense = rows[0];
+  
+  try {
+    if (expense.natureOfFund) {
+      if (typeof expense.natureOfFund === 'object') {
+        return expense;
+      }
+      expense.natureOfFund = JSON.parse(expense.natureOfFund);
+    } else {
+      expense.natureOfFund = [];
+    }
+  } catch (error) {
+    expense.natureOfFund = [{ type: expense.natureOfFund }];
+  }
+  
+  return expense;
+};
+
 export {
   createExpense,
   getExpenses,
   updateExpense,
-  deleteExpense
+  deleteExpense,
+  getExpenseById
 };

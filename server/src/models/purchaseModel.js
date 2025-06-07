@@ -4,7 +4,7 @@ import connectionPool from "../config/databaseConfig.js";
 const createPurchaseTableQuery = `
 CREATE TABLE IF NOT EXISTS purchases (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    purchase_id INT NOT NULL UNIQUE,
+    purchase_id VARCHAR(255) NOT NULL UNIQUE,
     expenses_number VARCHAR(255) NOT NULL UNIQUE,
     supplier_name VARCHAR(255) NOT NULL,
     purchase_date DATE NOT NULL,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../css/SettingsPage.css";
+import "../../css/SettingsPage.css";
 
 export default function SettingsPage({ onClose }) {
   // Initialize with actual current state instead of checking localStorage

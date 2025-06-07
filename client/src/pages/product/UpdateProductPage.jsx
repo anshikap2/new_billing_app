@@ -4,7 +4,10 @@ import "../../css/UpdateProductPage.css";
 import { API_BASE } from "../../config/config";
 
 export default function UpdateProductPage({ product, onClose, setProducts }) {
-  const [updatedProduct, setUpdatedProduct] = useState({ ...product });
+  const [updatedProduct, setUpdatedProduct] = useState({ 
+    ...product,
+    tax: product.tax || "" // Add tax to initial state
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,6 +107,25 @@ export default function UpdateProductPage({ product, onClose, setProducts }) {
           />
           <label>Product Type</label>
           <input type="text" name="product_type" value={updatedProduct.product_type || ""} onChange={handleChange} className="update-product-input" />
+          
+          {/* Add GST/Tax select field */}
+          <label>GST/Tax Rate</label>
+          <select
+            name="tax"
+            value={updatedProduct.tax || ""}
+            onChange={handleChange}
+            className="update-product-input"
+          >
+            <option value="">Select Tax Rate</option>
+            <option value="2">2%</option>
+            <option value="5">5%</option>
+            <option value="9">9%</option>
+            <option value="12">12%</option>
+            <option value="18">18%</option>
+            <option value="28">28%</option>
+            <option value="40">40%</option>
+          </select>
+
           <div className="update-product-btn-group">
             <button className="update-product-btn-save" onClick={handleUpdate}>Update</button>
             <button className="update-product-btn-cancel" onClick={onClose}>Cancel</button>

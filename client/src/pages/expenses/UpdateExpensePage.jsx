@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios'; // You can replace this with your custom Axios instance
 import '../../css/UpdateExpensePage.css';
-import { updateExpense } from '../../controllers/expenseController';
+import { updateExpense, getExpenseById } from '../../controllers/expenseController';
 import { FaArrowLeft, FaSave, FaPlus, FaTrash, FaCalendarAlt, FaMoneyBillWave } from 'react-icons/fa';
+import Spinner from '../../components/Spinner';
+
 
 const UpdateExpensePage = () => {
   const navigate = useNavigate();
@@ -26,20 +27,29 @@ const UpdateExpensePage = () => {
     remarks: ''
   });
 
+  // Available categories matching ExpensesPage
+  const categories = [
+    "Salary",
+    "Advance", 
+    "Personal Expense",
+    "Project Expense",
+    "Misc"
+  ];
+
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   };
 
-  // Validate form whenever expense changes
+  // Enhanced form validation with debugging
   useEffect(() => {
     const isValid = 
       expense.project?.trim() !== '' && 
       expense.employee?.trim() !== '' && 
       expense.paidby?.trim() !== '' && 
       expense.natureOfFund?.every(fund => fund?.trim() !== '') &&
-      expense.debit !== '' &&
+      (expense.debit !== '' || expense.credit !== '') && 
       expense.date !== '';
     
     setFormValid(isValid);
@@ -50,13 +60,9 @@ const UpdateExpensePage = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`/exp/expenses/${expenseId}`);
-        if (!response.data) {
-          throw new Error('Expense not found');
-        }
-        const data = response.data;
-
-        // Handle the natureOfFund data which might come in different formats
+        const data = await getExpenseById(expenseId);
+        
+        // Enhanced handling of natureOfFund data
         let natureOfFundArray = [''];
         
         if (Array.isArray(data.natureOfFund)) {
@@ -69,20 +75,35 @@ const UpdateExpensePage = () => {
           natureOfFundArray = [data.natureOfFund];
         }
 
-        setExpense({
-          ...data,
+        // Ensure we have at least one empty field if no data
+        if (natureOfFundArray.length === 0 || natureOfFundArray.every(fund => !fund)) {
+          natureOfFundArray = [''];
+        }
+
+        const formattedExpense = {
+          expenseId: data.expenseId || data._id || '',
+          project: data.project || '',
+          employee: data.employee || '',
+          paidby: data.paidby || data.paidBy || '',
+          natureOfFund: natureOfFundArray,
+          debit: data.debit || '',
+          credit: data.credit || '',
           date: formatDate(data.date),
           updatedDate: formatDate(data.updatedDate),
           createdDate: formatDate(data.createdDate),
-          natureOfFund: natureOfFundArray,
-        });
+          remarks: data.remarks || ''
+        };
+
+        setExpense(formattedExpense);
+        
       } catch (error) {
-        setError(error.response?.data?.message || 'Failed to load expense data');
-        console.error('Error fetching expense:', error);
-        // Add timeout before redirecting
+        const errorMessage = error.response?.data?.message || error.message || 'Failed to load expense data';
+        setError(errorMessage);
+        
+        // Auto-redirect after showing error
         setTimeout(() => {
           navigate('/dashboard/expenses-page');
-        }, 3000); // 3 seconds delay
+        }, 3000);
       } finally {
         setLoading(false);
       }
@@ -90,6 +111,9 @@ const UpdateExpensePage = () => {
 
     if (expenseId) {
       fetchExpenseData();
+    } else {
+      setError('No expense ID provided');
+      navigate('/dashboard/expenses-page');
     }
   }, [expenseId, navigate]);
 
@@ -136,43 +160,58 @@ const UpdateExpensePage = () => {
     setLoading(true);
     
     try {
-      // Transform the natureOfFund array into the expected format for the API
+      const formatSQLDate = (date) => {
+        if (!date) return null;
+        return new Date(date).toISOString().split('T')[0];
+      };
+      
       const updatedExpense = {
         ...expense,
-        natureOfFund: expense.natureOfFund.map(type => ({ type })),
-        date: new Date(expense.date),
-        updatedDate: new Date(),
-        createdDate: expense.createdDate ? new Date(expense.createdDate) : new Date()
+        natureOfFund: expense.natureOfFund
+          .filter(type => type.trim() !== '')
+          .map(type => ({ type: type.trim() })),
+        date: formatSQLDate(expense.date),
+        updatedDate: formatSQLDate(new Date()),
+        createdDate: formatSQLDate(expense.createdDate || new Date()),
+        debit: expense.debit ? Number(expense.debit) : 0,
+        credit: expense.credit ? Number(expense.credit) : 0
       };
 
       await updateExpense(expenseId, updatedExpense);
       alert('Expense updated successfully!');
       navigate('/dashboard/expenses-page');
     } catch (error) {
-      console.error('Error updating expense:', error);
-      alert('Failed to update expense. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Failed to update expense. Please try again.';
+      alert(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  // Add error display
+  // Enhanced error display
   if (error) {
     return (
       <div className="update-expense-container error-container">
         <div className="error-message">
-          <h3>Error</h3>
+          <h3>❌ Error</h3>
           <p>{error}</p>
           <p>Redirecting to expenses list...</p>
+          <button 
+            onClick={() => navigate('/dashboard/expenses-page')}
+            className="update-exp-cancel-btn"
+          >
+            <FaArrowLeft style={{ marginRight: '5px' }} /> Back to Expenses
+          </button>
         </div>
       </div>
     );
   }
 
+  // Enhanced loading display
   if (loading && !expense.project) {
     return (
       <div className="update-expense-container loading-container">
-        <div className="loading-spinner"></div>
+        <Spinner />
         <p>Loading expense data...</p>
       </div>
     );
@@ -180,9 +219,15 @@ const UpdateExpensePage = () => {
 
   return (
     <div className="update-expense-container">
+      
+
       <div className="update-expense-header">
-        <h2><FaMoneyBillWave style={{ marginRight: '10px', verticalAlign: 'middle' }} /> Update Expense</h2>
+        <h2>
+          <FaMoneyBillWave style={{ marginRight: '10px', verticalAlign: 'middle' }} /> 
+          Update Expense
+        </h2>
         <p>Review and modify expense details below</p>
+       
       </div>
       
       <form onSubmit={handleSubmit} className="update-expense-form">
@@ -231,14 +276,19 @@ const UpdateExpensePage = () => {
             <div className="nature-fund-container">
               {expense.natureOfFund.map((type, index) => (
                 <div key={index} className="nature-fund-row">
-                  <input
-                    type="text"
+                  <select
                     value={type || ''}
                     onChange={(e) => handleNatureOfFundChange(index, e.target.value)}
                     className={`nature-input ${type ? 'valid-input' : ''}`}
-                    placeholder="Specify fund nature"
                     required
-                  />
+                  >
+                    <option value="">Select fund type</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
                   {expense.natureOfFund.length > 1 && (
                     <button 
                       type="button" 
@@ -252,9 +302,7 @@ const UpdateExpensePage = () => {
                 </div>
               ))}
             </div>
-            <button type="button" onClick={addNatureOfFund} className="add-btn">
-              <FaPlus style={{ marginRight: '5px' }} /> Add Another Fund Type
-            </button>
+          
           </div>
           
           <div className="form-group">
@@ -267,9 +315,9 @@ const UpdateExpensePage = () => {
               placeholder="0.00"
               min="0"
               step="0.01"
-              required
               className={expense.debit ? 'valid-input' : ''}
             />
+            <small className="field-note">Amount to be paid/spent</small>
           </div>
           
           <div className="form-group">
@@ -284,6 +332,7 @@ const UpdateExpensePage = () => {
               step="0.01"
               className={expense.credit ? 'valid-input' : ''}
             />
+            <small className="field-note">Amount received/advance</small>
           </div>
           
           <div className="form-group">
@@ -296,6 +345,7 @@ const UpdateExpensePage = () => {
                 onChange={handleChange}
                 required
                 className={expense.date ? 'valid-input' : ''}
+                max={new Date().toISOString().split('T')[0]} // Prevent future dates
               />
               <FaCalendarAlt className="date-icon" />
             </div>
@@ -310,9 +360,39 @@ const UpdateExpensePage = () => {
               placeholder="Add any additional information about this expense"
               rows="3"
               className={expense.remarks ? 'valid-input' : ''}
+              maxLength={500}
             />
+            <small className="field-note">
+              {expense.remarks ? expense.remarks.length : 0}/500 characters
+            </small>
           </div>
         </div>
+
+        {/* Balance calculation display */}
+        {(expense.debit || expense.credit) && (
+          <div className="balance-display">
+            <h4>Financial Summary</h4>
+            <div className="balance-grid">
+              <div className="balance-item">
+                <span>Debit:</span>
+                <span className="debit-amount">₹{Number(expense.debit || 0).toFixed(2)}</span>
+              </div>
+              <div className="balance-item">
+                <span>Credit:</span>
+                <span className="credit-amount">₹{Number(expense.credit || 0).toFixed(2)}</span>
+              </div>
+              <div className="balance-item total">
+                <span>Balance:</span>
+                <span className={`balance-amount ${
+                  (Number(expense.credit || 0) - Number(expense.debit || 0)) >= 0 ? 'positive' : 'negative'
+                }`}>
+                  ₹{Math.abs(Number(expense.credit || 0) - Number(expense.debit || 0)).toFixed(2)}
+                  {(Number(expense.credit || 0) - Number(expense.debit || 0)) >= 0 ? ' (Credit)' : ' (Debit)'}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
         
         <div className="form-actions">
           <button
@@ -328,7 +408,11 @@ const UpdateExpensePage = () => {
             className={`update-exp-submit-btn ${formValid ? 'btn-enabled' : 'btn-disabled'}`}
             disabled={loading || !formValid}
           >
-            {loading ? 'Updating...' : (
+            {loading ? (
+              <>
+                <Spinner /> Updating...
+              </>
+            ) : (
               <>
                 <FaSave style={{ marginRight: '5px' }} /> Update Expense
               </>

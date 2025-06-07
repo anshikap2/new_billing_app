@@ -47,8 +47,8 @@ const Sidebar = () => {
             <li><Link onClick={handleLinkClick} to="/dashboard/purchase-page"><FaShoppingCart/> Purchase</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/organization-page"><FaBuilding /> Organization</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/expenses-page"><FaMoneyBillWave /> Expenses</Link></li>
-            <li><Link onClick={handleLinkClick} to="/dashboard/employee"><FaUserTie /> Employee</Link></li>
-            <li><Link onClick={handleLinkClick} to="/dashboard/project"><FaTasks /> Project</Link></li>
+            <li><Link onClick={handleLinkClick} to="/dashboard/employee-page"><FaUserTie /> Employee</Link></li>
+            <li><Link onClick={handleLinkClick} to="/dashboard/project-page"><FaTasks /> Project</Link></li>
             <li><Link onClick={handleLinkClick} to="/dashboard/report"><FaChartBar /> Reports</Link></li>
           </ul>
         </nav>

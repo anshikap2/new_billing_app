@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import AuthForm from "../views/AuthForm";
-import Homepage from "../views/Homepage";
+import AuthForm from "../pages/AuthForm";
+import Homepage from "../pages/homepage/Homepage";
 import DashboardLayout from "../pages/DashboardLayout";
 import CustomerList from "../pages/customer/CustomerList";
 import CustomerForm from "../pages/customer/CustomerForm";
@@ -20,7 +20,7 @@ import ExpensesPage from "../pages/expenses/ExpensesPage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import OrganizationPage from "../pages/organization/OrganizationPage";
 import ExpensesGraphPage from "../pages/expenses/ExpensesGraphPage";
-import UserProfilePage from "../pages/UserProfilePage";
+import UserProfilePage from "../pages/headerbar/UserProfilePage";
 import AddOrganizationPage from "../pages/organization/AddOragnizationPage";
 import UpdateOrganizationPage from "../pages/organization/UpdateOrganizationPage";
 import ReportPage from "../pages/report/ReportPage";
@@ -100,8 +100,8 @@ const AppRoutes = () => {
         <Route path="create-purchase" element={<CreatePurchasePage />} />
         <Route path="update-purchase" element={<UpdatePurchasePage />} />
         <Route path="report" element={<ReportPage />} />
-        <Route path="project" element={<ProjectPage />} />
-        <Route path="employee" element={<EmployeePage />} />
+        <Route path="project-page" element={<ProjectPage />} />
+        <Route path="employee-page" element={<EmployeePage />} />
         <Route path="update-project/:projectId" element={<ProjectUpdate />} />
         <Route path="update-employee/:employeeId" element={<EmployeeUpdate />} />
       </Route>

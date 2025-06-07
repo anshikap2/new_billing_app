@@ -1,7 +1,7 @@
 import React from "react";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import "../css/LogoutPage.css";
+import "../../css/LogoutPage.css";
 
 const clearAuthData = () => {
   // Clear all auth-related data

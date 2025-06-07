@@ -2,7 +2,7 @@ import React from 'react';
 import  { useState } from "react";
 import SettingsPage from "./SettingsPage";
 import {  FaSearch, FaPowerOff, FaCog, FaUserCircle } from "react-icons/fa";  // Import the settings and logout icons
-import "../css/Header.css";
+import "../../css/Header.css";
 import UserProfilePage from "./UserProfilePage"; 
 import LogoutPage from "./LogOutPage";
 

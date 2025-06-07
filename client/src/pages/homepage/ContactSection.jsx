@@ -9,17 +9,17 @@ const ContactSection = () => {
         <p className="section-text">
           <FaEnvelope className="contact-icon" />
           <span>Email: </span>
-          <a href="mailto:support@myapp.com">support@myapp.com</a>
+          <a href="mahadhyutaedtech@gmail.com">mahadhyutaedtech@gmail.com</a>
         </p>
         <p className="section-text">
           <FaPhone className="contact-icon" />
           <span>Phone: </span>
-          <a href="tel:+15551234567">+1 (555) 123-4567</a>
+          <a href="+91 9452801761">+91 9452801761</a>
         </p>
         <p className="section-text">
           <FaMapMarkerAlt className="contact-icon" />
           <span>Address: </span>
-          123 Business Street, City, State 12345
+          Bhubaneswar Odisha IRC Village Nayapalli, India - 751015
         </p>
       </div>
     </section>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleLogin, handleSignup } from "../models/authModel";
 import { toast, ToastContainer } from 'react-toastify';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 import '../css/AuthForm.css';
 
@@ -13,19 +14,25 @@ const AuthForm = () => {
     const [userName, setUserName] = useState("");
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
-    const [loading, setLoading] = useState(false); // Add loading state
+    const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const clearForm = () => {
         setPassword("");
         setUserName("");
+        setEmail("");
         setError("");
-        setMessage("");  // Add this to clear success message
+        setMessage("");
+        setShowPassword(false);
     };
 
     const toggleForm = () => {
-        clearForm();  // Clear form when switching between login/signup
-        setIsLogin(!isLogin);
+        clearForm();  // Clear form first
+        toast.dismiss(); // Clear any existing toasts
+        setTimeout(() => {
+            setIsLogin(!isLogin); // Toggle form state after clearing
+        }, 0);
     };
 
     const verifyAuthData = () => {
@@ -39,7 +46,7 @@ const AuthForm = () => {
         e.preventDefault();
         setError("");
         setMessage("");
-        setLoading(true); // Set loading to true on submit
+        setLoading(true);
         
         try {
             if (isLogin) {
@@ -57,6 +64,8 @@ const AuthForm = () => {
             } else {
                 const success = await handleSignup(userName, email, password, navigate, setMessage, setError);
                 if (success) {
+                    clearForm(); // Clear form after successful signup
+                    setIsLogin(true);
                     toast.success('✨ Account created successfully! Please login.', {
                         position: "top-right",
                         autoClose: 3000,
@@ -64,9 +73,6 @@ const AuthForm = () => {
                         closeOnClick: true,
                         theme: "colored"
                     });
-                    setPassword("");
-                    setUserName("");
-                    setIsLogin(true);
                 }
             }
         } catch (err) {
@@ -97,8 +103,8 @@ const AuthForm = () => {
                 <h2 className="auth-title">{isLogin ? "Login" : "Signup"} Form</h2>
 
                 <div className="auth-toggle">
-                    <button onClick={() => setIsLogin(true)} className={isLogin ? "active" : ""}>Login</button>
-                    <button onClick={() => setIsLogin(false)} className={!isLogin ? "active" : ""}>Signup</button>
+                    <button onClick={toggleForm} className={isLogin ? "active" : ""}>Login</button>
+                    <button onClick={toggleForm} className={!isLogin ? "active" : ""}>Signup</button>
                 </div>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
@@ -107,7 +113,33 @@ const AuthForm = () => {
                     )}
 
                     <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    
+                    <div className="password-input-container" style={{ position: 'relative', width: '100%' }}>
+                        <input 
+                            type={showPassword ? "text" : "password"} 
+                            placeholder="Password" 
+                            value={password} 
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required 
+                        />
+                        <button 
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            style={{
+                                position: 'absolute',
+                                right: '10px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                border: 'none',
+                                background: 'none',
+                                cursor: 'pointer',
+                                padding: '5px',
+                                color: '#666'
+                            }}
+                        >
+                            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
+                    </div>
 
                     {error && <p className="error-message">{error}</p>}
                     {message && <p className="success-message">{message}</p>}

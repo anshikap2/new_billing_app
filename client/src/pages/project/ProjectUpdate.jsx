@@ -27,7 +27,7 @@ const ProjectUpdate = () => {
     const parsedId = parseInt(projectId);  // Changed from projectId to parsedId
     if (!parsedId || isNaN(parsedId)) {
       setError('Invalid project ID');
-      setTimeout(() => navigate('/dashboard/project'), 2000);
+      setTimeout(() => navigate('/dashboard/project-page'), 2000);
       return;
     }
     fetchProject(parsedId);
@@ -59,7 +59,7 @@ const ProjectUpdate = () => {
       });
     } catch (err) {
       setError(err.message);
-      setTimeout(() => navigate('/dashboard/project'), 2000);
+      setTimeout(() => navigate('/dashboard/project-page'), 2000);
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ const ProjectUpdate = () => {
       await updateProject(projectId, formattedData);
       setSuccess(true);
       setTimeout(() => {
-        navigate('/dashboard/project');
+        navigate('/dashboard/project-page');
       }, 1500); // Wait 1.5 seconds before navigation
     } catch (err) {
       setError(err.message || 'Failed to update project');
@@ -255,7 +255,7 @@ const ProjectUpdate = () => {
         </div>
 
         <div className="form-actions">
-          <button type="button" onClick={() => navigate('/dashboard/project')} className="cancel-btn">
+          <button type="button" onClick={() => navigate('/dashboard/project-page')} className="cancel-btn">
             Cancel
           </button>
           <button type="submit" className="submit-btn" disabled={loading}>

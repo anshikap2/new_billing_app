@@ -26,7 +26,7 @@ const EmployeeUpdate = () => {
     const parsedId = parseInt(employeeId);
     if (!parsedId || isNaN(parsedId)) {
       setError('Invalid employee ID');
-      setTimeout(() => navigate('/dashboard/employees'), 2000);
+      setTimeout(() => navigate('/dashboard/employee-page'), 2000);
       return;
     }
     fetchEmployee(parsedId);
@@ -56,7 +56,7 @@ const EmployeeUpdate = () => {
       });
     } catch (err) {
       setError(err.message);
-      setTimeout(() => navigate('/dashboard/employees'), 2000);
+      setTimeout(() => navigate('/dashboard/employee-page'), 2000);
     } finally {
       setLoading(false);
     }
@@ -240,7 +240,7 @@ const EmployeeUpdate = () => {
         </div>
 
         <div className="form-actions">
-          <button type="button" onClick={() => navigate('/dashboard/employees')} className="cancel-btn">
+          <button type="button" onClick={() => navigate('/dashboard/employee-page')} className="cancel-btn">
             Cancel
           </button>
           <button type="submit" className="submit-btn" disabled={loading}>

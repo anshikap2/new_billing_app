@@ -81,7 +81,7 @@ const InvoicePdf = () => {
             name: firstItem.name || "N/A",
             address: firstItem.gst_details?.address || "N/A",
             gst_number: firstItem.gst_details?.gst_number || "N/A",
-            reg_number: firstItem.reg_number || "N/A",
+            pan_number: firstItem.pan_number || "N/A",
             email: firstItem.email || "N/A",
             phone: firstItem.phone || "N/A",
             bank_name: firstItem.bank_name || "N/A",
@@ -90,6 +90,7 @@ const InvoicePdf = () => {
             ifsc: firstItem.ifsc || "N/A",
             branch: firstItem.branch || "N/A",
             logo: firstItem.logo_image || null,
+            signature_image: firstItem.signature_image || null, // Add this line
           },
           products: [{
             product_id: firstItem.product_id || "N/A",
@@ -261,7 +262,7 @@ const InvoicePdf = () => {
             <td colSpan="10"><b><i>Address:</i> {invoice?.organization?.address}</b></td>
           </tr>
           <tr>
-            <td colSpan="5" style={{ borderRight: '1px solid #ddd' }}><b><i>PAN No.:</i> {invoice?.organization?.reg_number}</b></td>
+            <td colSpan="5" style={{ borderRight: '1px solid #ddd' }}><b><i>PAN No.:</i> {invoice?.organization?.pan_number}</b></td>
             <td colSpan="5">
               
               <div>
@@ -398,8 +399,28 @@ const InvoicePdf = () => {
             <td colSpan="5" style={{ textAlign: 'left', padding: '40px 15px 15px', verticalAlign: 'bottom', borderBottom: '1px solid #000' }}>
               Customer Seal and Signature
             </td>
-            <td colSpan="5" style={{ textAlign: 'right', padding: '40px 15px 15px', verticalAlign: 'bottom', borderBottom: '1px solid #000' }}>
-              Authorised Signature
+            <td colSpan="5" style={{ textAlign: 'right', padding: '15px', verticalAlign: 'bottom', borderBottom: '1px solid #000' }}>
+              {invoice?.organization?.signature_image ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '5px' }}>
+                  <img 
+                    src={invoice.organization.signature_image} 
+                    alt="Authorized Signature" 
+                    style={{ 
+                      maxHeight: '60px',
+                      maxWidth: '150px',
+                      objectFit: 'contain',
+                      marginBottom: '5px'
+                    }}
+                    onError={(e) => {
+                      console.error('Signature image failed to load:', invoice.organization.signature_image);
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  <span>Authorised Signature</span>
+                </div>
+              ) : (
+                "Authorised Signature"
+              )}
             </td>
           </tr>
           <tr><td colSpan="10" style={{ padding: '15px' }}></td></tr>

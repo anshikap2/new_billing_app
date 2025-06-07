@@ -123,7 +123,7 @@ const ExpensesPage = () => {
     setExpandedRow(expandedRow === expenseId ? null : expenseId);
   };
 
-  const handleAddEmployee = () => {
+  {/*const handleAddEmployee = () => {
     console.debug("[ExpensesPage] Navigate to Add Employee page");
     navigate("/dashboard/add-employee");
   };
@@ -132,6 +132,7 @@ const ExpensesPage = () => {
     console.debug("[ExpensesPage] Navigate to Add Project page");
     navigate("/dashboard/add-project");
   };
+*/}
 
   // Delete expense handler
   const handleDelete = async (expenseId) => {
@@ -214,294 +215,300 @@ const displayNatureOfFund = (natureOfFund) => {
   };
 
   return (
-    <div className="expense-container">
-      <div className="expense-fixed-header">
-        <div className="expense-title">
-          <h2>Expenses</h2>
-        </div>
-        <div className="expense-controls">
+  <div className="expense-container">
+  <div className="expense-fixed-header">
+    <div className="expense-title">
+      <h2>Expenses</h2>
+    </div>
+    <div className="expense-controls">
+      <select
+        value={selectedCategory}
+        onChange={(e) => {
+          console.debug("[ExpensesPage] Category changed to:", e.target.value);
+          setSelectedCategory(e.target.value);
+        }}
+        className="category-select"
+      >
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
+      </select>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search Expense"
+          value={search}
+          onChange={(e) => {
+            console.debug("[ExpensesPage] Search changed to:", e.target.value);
+            setSearch(e.target.value);
+          }}
+        />
+        <span className="search-icon">
+          <FaSearch className="search-icon" />
+        </span>
+      </div>
+      <button
+        className="action-button filter-btn"
+        onClick={() => setShowFilters(!showFilters)}
+      >
+        <FaFilter /> {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
+      <button
+        className="action-button create-btn"
+        onClick={() => {
+          console.debug("[ExpensesPage] Navigate to Create Expense page");
+          navigate("/dashboard/create-expense");
+        }}
+      >
+        New
+      </button>
+      {/* Uncomment if you have employee and project pages
+      <button className="action-button emp-btn" onClick={handleAddEmployee}>
+        <FaUserPlus /> 
+      </button>
+      <button
+        className="action-button project-btn"
+        onClick={handleAddProject}
+      >
+        <FaFolderPlus /> 
+      </button>
+      */}
+      <button
+        className="action-button graph-btn"
+        onClick={() => {
+          console.debug("[ExpensesPage] Open Graph view");
+          setIsGraphOpen(true);
+        }}
+      >
+        Graph
+      </button>
+      <button
+        className="export-excel-btn"
+        onClick={handleExportExcel}
+        title="Export to Excel"
+      >
+        <FaFileExcel /> 
+      </button>
+    </div>
+
+    {showFilters && (
+      <div className="advanced-filters">
+        <div className="filter-group">
           <select
-            value={selectedCategory}
-            onChange={(e) => {
-              console.debug("[ExpensesPage] Category changed to:", e.target.value);
-              setSelectedCategory(e.target.value);
-            }}
-            className="category-select"
+            value={projectFilter}
+            onChange={(e) => setProjectFilter(e.target.value)}
+            className="filter-select"
           >
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            <option value="">All Projects</option>
+            {[...new Set(expenses.map(exp => exp.project))].map(project => (
+              <option key={project} value={project}>{project}</option>
+            ))}
+          </select>
+
+          <select
+            value={employeeFilter}
+            onChange={(e) => setEmployeeFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">All Employees</option>
+            {[...new Set(expenses.map(exp => exp.employee))].map(employee => (
+              <option key={employee} value={employee}>{employee}</option>
+            ))}
+          </select>
+
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">All Months</option>
+            {months.map(month => (
+              <option key={month.value} value={month.value}>
+                {month.label}
               </option>
             ))}
           </select>
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Search Expense"
-              value={search}
-              onChange={(e) => {
-                console.debug("[ExpensesPage] Search changed to:", e.target.value);
-                setSearch(e.target.value);
-              }}
-            />
-            <span className="search-icon">
-              <FaSearch className="search-icon" />
-            </span>
-          </div>
-          <button
-            className="action-button filter-btn"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <FaFilter /> {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </button>
-          <button
-            className="action-button create-btn"
-            onClick={() => {
-              console.debug("[ExpensesPage] Navigate to Create Expense page");
-              navigate("/dashboard/create-expense");
-            }}
-          >
-            New
-          </button>
-          <button className="action-button emp-btn" onClick={handleAddEmployee}>
-            <FaUserPlus /> 
-          </button>
-          <button
-            className="action-button project-btn"
-            onClick={handleAddProject}
-          >
-            <FaFolderPlus /> 
-          </button>
-          <button
-            className="action-button graph-btn"
-            onClick={() => {
-              console.debug("[ExpensesPage] Open Graph view");
-              setIsGraphOpen(true);
-            }}
-          >
-            Graph
-          </button>
-          <button
-            className="export-excel-btn"
-            onClick={handleExportExcel}
-            title="Export to Excel"
-          >
-            <FaFileExcel /> 
+
+          <button className="action-button reset-btn" onClick={resetFilters}>
+            Reset Filters
           </button>
         </div>
-
-        {showFilters && (
-          <div className="advanced-filters">
-            <div className="filter-group">
-              <select
-                value={projectFilter}
-                onChange={(e) => setProjectFilter(e.target.value)}
-                className="filter-select"
-              >
-                <option value="">All Projects</option>
-                {[...new Set(expenses.map(exp => exp.project))].map(project => (
-                  <option key={project} value={project}>{project}</option>
-                ))}
-              </select>
-
-              <select
-                value={employeeFilter}
-                onChange={(e) => setEmployeeFilter(e.target.value)}
-                className="filter-select"
-              >
-                <option value="">All Employees</option>
-                {[...new Set(expenses.map(exp => exp.employee))].map(employee => (
-                  <option key={employee} value={employee}>{employee}</option>
-                ))}
-              </select>
-
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                className="filter-select"
-              >
-                <option value="">All Months</option>
-                {months.map(month => (
-                  <option key={month.value} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
-              </select>
-
-              <button className="action-button reset-btn" onClick={resetFilters}>
-                Reset Filters
-              </button>
-            </div>
-          </div>
-        )}
       </div>
+    )}
+  </div>
 
-      <div className="table-container">
-        {loading ? (
-          <div className="spinner-overlay">
-            <Spinner />
-          </div>
-        ) : error ? (
-          <p className="error-message">❌ Error: {error}</p>
-        ) : (
-          <table className="expense-table">
-            <thead>
-              <tr>
-                <th>Project</th>
-                <th>Employee Name</th>
-                <th>Funds</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {!loading && !error && filteredExpenses.length > 0 ? (
-                filteredExpenses.map((expense) => (
-                  <React.Fragment key={expense.expenseId}>
-                    <tr
-                      onClick={() => toggleRowExpansion(expense.expenseId)}
-                      className={`expense-row ${
-                        expandedRow === expense.expenseId ? "expanded" : ""
-                      }`}
-                    >
-                      <td>{expense.project}</td>
-                      <td>{expense.employee}</td>
-                      <td>{displayNatureOfFund(expense.natureOfFund)}</td>
-                      <td>₹{expense.debit}</td>
-                      <td>₹{expense.credit}</td>
-                      <td className="expense-action">
-                        <span className="action-buttons">
-                          <button
-                            className="action-btn edit-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              console.debug(`[ExpensesPage] Edit clicked for expenseId: ${expense.expenseId}`);
-                              navigate(
-                                `/dashboard/update-expense/${expense.expenseId}`
-                              );
-                            }}
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            className="action-btn delete-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(expense.expenseId);
-                            }}
-                          >
-                            <FaTrash />
-                          </button>
-                        </span>
+  {/* NEW: Content wrapper for proper flex layout */}
+  <div className="expense-content-wrapper">
+    <div className="table-container">
+      {loading ? (
+        <div className="spinner-overlay">
+          <Spinner />
+        </div>
+      ) : error ? (
+        <p className="error-message">❌ Error: {error}</p>
+      ) : (
+        <table className="expense-table">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Employee Name</th>
+              <th>Funds</th>
+              <th>Debit</th>
+              <th>Credit</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {!loading && !error && filteredExpenses.length > 0 ? (
+              filteredExpenses.map((expense) => (
+                <React.Fragment key={expense.expenseId}>
+                  <tr
+                    onClick={() => toggleRowExpansion(expense.expenseId)}
+                    className={`expense-row ${
+                      expandedRow === expense.expenseId ? "expanded" : ""
+                    }`}
+                  >
+                    <td>{expense.project}</td>
+                    <td>{expense.employee}</td>
+                    <td>{displayNatureOfFund(expense.natureOfFund)}</td>
+                    <td>₹{expense.debit}</td>
+                    <td>₹{expense.credit}</td>
+                    <td className="expense-action">
+                      <span className="action-buttons">
+                        <button
+                          className="expense-update-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.debug(`[ExpensesPage] Edit clicked for expenseId: ${expense.expenseId}`);
+                            navigate(
+                              `/dashboard/update-expense/${expense.expenseId}`
+                            );
+                          }}
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          className="expense-delete-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(expense.expenseId);
+                          }}
+                        >
+                          <FaTrash />
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                  {expandedRow === expense.expenseId && (
+                    <tr className="expanded-details">
+                      <td colSpan="6">
+                        <div className="details-grid">
+                          <div className="detail-section">
+                            <h4>Financial Details</h4>
+                            <p>
+                              <strong>Debit:</strong> ₹{expense.debit}
+                            </p>
+                            <p>
+                              <strong>Credit:</strong> ₹{expense.credit}
+                            </p>
+                            <p>
+                              <strong>Balance (Due - Advance):</strong> ₹
+                              {(
+                                Number(expense.credit || 0) -
+                                Number(expense.debit || 0)
+                              ).toFixed(2)}
+                            </p>
+                          </div>
+
+                          <div className="detail-section">
+                            <h4>Employee Information</h4>
+                            <p>
+                              <strong>Project:</strong> {expense.project}
+                            </p>
+                            <p>
+                              <strong>Employee:</strong> {expense.employee}
+                            </p>
+                            <p>
+                              <strong>Date:</strong>{" "}
+                              {new Date(expense.date).toLocaleDateString()}
+                            </p>
+                            <p>
+                              <strong>Updated Date:</strong>{" "}
+                              {new Date(
+                                expense.updatedDate
+                              ).toLocaleDateString()}
+                            </p>
+                          </div>
+
+                          <div className="detail-section">
+                            <h4>Additional Information</h4>
+                            <p>
+                              <strong>Remarks:</strong> {expense.remarks}
+                            </p>
+                            <p>
+                              <strong>Paid By:</strong> {expense.paidby}
+                            </p>
+                            {expense.paidbyDetails && (
+                              <p>
+                                <strong>Payment Details:</strong>{" "}
+                                {expense.paidbyDetails}
+                              </p>
+                            )}
+                            <p>
+                              <strong>Created Date:</strong>{" "}
+                              {new Date(
+                                expense.createdDate
+                              ).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
                       </td>
                     </tr>
-                    {expandedRow === expense.expenseId && (
-                      <tr className="expanded-details">
-                        <td colSpan="6">
-                          <div className="details-grid">
-                            <div className="detail-section">
-                              <h4>Financial Details</h4>
-                              <p>
-                                <strong>Debit:</strong> ₹{expense.debit}
-                              </p>
-                              <p>
-                                <strong>Credit:</strong> ₹{expense.credit}
-                              </p>
-                              <p>
-                                <strong>Balance (Due - Advance):</strong> ₹
-                                {(
-                                  Number(expense.credit || 0) -
-                                  Number(expense.debit || 0)
-                                ).toFixed(2)}
-                              </p>
-                            </div>
-
-                            <div className="detail-section">
-                              <h4>Employee Information</h4>
-                              <p>
-                                <strong>Project:</strong> {expense.project}
-                              </p>
-                              <p>
-                                <strong>Employee:</strong> {expense.employee}
-                              </p>
-                              <p>
-                                <strong>Date:</strong>{" "}
-                                {new Date(expense.date).toLocaleDateString()}
-                              </p>
-                              <p>
-                                <strong>Updated Date:</strong>{" "}
-                                {new Date(
-                                  expense.updatedDate
-                                ).toLocaleDateString()}
-                              </p>
-                            </div>
-
-                            <div className="detail-section">
-                              <h4>Additional Information</h4>
-                              <p>
-                                <strong>Remarks:</strong> {expense.remarks}
-                              </p>
-                              <p>
-                                <strong>Paid By:</strong> {expense.paidby}
-                              </p>
-                              {expense.paidbyDetails && (
-                                <p>
-                                  <strong>Payment Details:</strong>{" "}
-                                  {expense.paidbyDetails}
-                                </p>
-                              )}
-                              <p>
-                                <strong>Created Date:</strong>{" "}
-                                {new Date(
-                                  expense.createdDate
-                                ).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="6" className="no-expenses">
-                    No expenses found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-            <tfoot>
-              <tr className="summary-row">
-                <td colSpan="2" style={{ textAlign: "right", fontWeight: "bold" }}>
-                  Total:
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  No expenses found.
                 </td>
-                <td style={{ fontWeight: "bold", textAlign: "right" }}>
-                  Balance: 
-                  <span style={{ 
-                    color: totalCredit - totalDebit >= 0 ? "#059669" : "#dc2626",
-                    marginLeft: "8px"
-                  }}>
-                    ₹{Math.abs(totalCredit - totalDebit).toLocaleString()}
-                    <span className="balance-indicator" aria-hidden="true" style={{ marginLeft: "4px" }}>
-                      {totalCredit - totalDebit >= 0 ? '▲' : '▼'}
-                    </span>
-                  </span>
-                </td>
-                <td style={{ fontWeight: "bold", color: "#dc2626" }}>
-                  ₹{totalDebit.toLocaleString()}
-                </td>
-                <td style={{ fontWeight: "bold", color: "#059669" }}>
-                  ₹{totalCredit.toLocaleString()}
-                </td>
-                <td></td>
               </tr>
-            </tfoot>
-          </table>
-        )}
-      </div>
+            )}
+          </tbody>
+          <tfoot>
+            <tr className="summary-row">
+              <td colSpan="2" style={{ textAlign: "right", fontWeight: "bold" }}>
+                Total:
+              </td>
+              <td style={{ fontWeight: "bold", textAlign: "right" }}>
+                Balance: 
+                <span style={{ 
+                  color: totalCredit - totalDebit >= 0 ? "#059669" : "#dc2626",
+                  marginLeft: "8px"
+                }}>
+                  ₹{Math.abs(totalCredit - totalDebit).toLocaleString()}
+                  <span className="balance-indicator" aria-hidden="true" style={{ marginLeft: "4px" }}>
+                    {totalCredit - totalDebit >= 0 ? '▲' : '▼'}
+                  </span>
+                </span>
+              </td>
+              <td style={{ fontWeight: "bold", color: "#dc2626" }}>
+                ₹{totalDebit.toLocaleString()}
+              </td>
+              <td style={{ fontWeight: "bold", color: "#059669" }}>
+                ₹{totalCredit.toLocaleString()}
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      )}
+    </div>
 
+    {/* MOVED: Pagination inside content wrapper */}
+    <div className="pagination-container">
       <div className="pagination">
         <button
           disabled={page === 1}
@@ -509,12 +516,12 @@ const displayNatureOfFund = (natureOfFund) => {
             console.debug(`[ExpensesPage] Previous page clicked. Current page: ${page}`);
             setPage(page - 1);
           }}
+          className="pagination-btn"
         >
           Previous
         </button>
-        <span>
-          {" "}
-          Page {page} of {totalPages}{" "}
+        <span className="pagination-info">
+          Page {page} of {totalPages}
         </span>
         <button
           disabled={page === totalPages}
@@ -522,21 +529,24 @@ const displayNatureOfFund = (natureOfFund) => {
             console.debug(`[ExpensesPage] Next page clicked. Current page: ${page}`);
             setPage(page + 1);
           }}
+          className="pagination-btn"
         >
           Next
         </button>
       </div>
-
-      {isGraphOpen && (
-        <ExpensesGraphPage
-          onClose={() => {
-            console.debug("[ExpensesPage] Close graph view");
-            setIsGraphOpen(false);
-          }}
-          expenses={filteredExpenses}
-        />
-      )}
     </div>
+  </div>
+
+  {isGraphOpen && (
+    <ExpensesGraphPage
+      onClose={() => {
+        console.debug("[ExpensesPage] Close graph view");
+        setIsGraphOpen(false);
+      }}
+      expenses={filteredExpenses}
+    />
+  )}
+</div>
   );
 };
 

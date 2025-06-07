@@ -2,7 +2,7 @@
 import React from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import Headerbar from "./Headerbar";
+import Headerbar from "./headerbar/Headerbar";
 import "../css/Layout.css";
 
 const DashboardLayout = () => {

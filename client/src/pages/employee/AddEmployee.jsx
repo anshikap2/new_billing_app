@@ -66,7 +66,7 @@ const AddEmployee = () => {
 
         setTimeout(() => {
           setSubmitted(false);
-          navigate('/dashboard/expenses-page'); // Change path if needed
+          navigate('/dashboard/employee-page'); // Change path if needed
         }, 2000);
       } else {
         throw new Error('Unexpected response from server');
@@ -227,7 +227,7 @@ const AddEmployee = () => {
         
         <div className="form-actions">
           <button type="submit" className="submit-btn">Add Employee</button>
-            <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard/expenses-page')}>
+            <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard/employee-page')}>
                Back
                 </button>
         </div>

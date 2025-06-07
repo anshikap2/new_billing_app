@@ -8,6 +8,7 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
   const [updatedOrg, setUpdatedOrg] = useState(organization || {});
   const [gstEntries, setGstEntries] = useState([]);
   const [logoFile, setLogoFile] = useState(null);
+  const [signatureFile, setSignatureFile] = useState(null);
 
   useEffect(() => {
     // Initialize with organization data or empty object
@@ -45,6 +46,38 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
     setGstEntries(gstEntries.filter((_, i) => i !== index));
   };
 
+  const handleSignatureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (300KB limit for signature)
+      if (file.size > 300 * 1024) {
+        alert('Signature file size should be less than 300KB');
+        return;
+      }
+      setSignatureFile(file);
+      setUpdatedOrg(prev => ({
+        ...prev,
+        signature_image: URL.createObjectURL(file)
+      }));
+    }
+  };
+
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (500KB limit for logo)
+      if (file.size > 500 * 1024) {
+        alert('Logo file size should be less than 500KB');
+        return;
+      }
+      setLogoFile(file);
+      setUpdatedOrg(prev => ({
+        ...prev,
+        logo_image: URL.createObjectURL(file)
+      }));
+    }
+  };
+
   const handleUpdate = async () => {
     if (!updatedOrg.org_id) {
       alert("❌ Organization ID is required");
@@ -58,7 +91,31 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
     }
 
     try {
-      // Prepare GST details
+      // Convert form data to clean object first
+      const updateData = {
+        name: updatedOrg.name,
+        type: updatedOrg.type,
+        email: updatedOrg.email,
+        phone: updatedOrg.phone,
+        website: updatedOrg.website,
+        reg_number: updatedOrg.reg_number,
+        pan_number: updatedOrg.pan_number,
+        invoice_prefix: updatedOrg.invoice_prefix,
+        bank_name: updatedOrg.bank_name,
+        acc_name: updatedOrg.acc_name,
+        ifsc: updatedOrg.ifsc,
+        branch: updatedOrg.branch,
+        acc_num: updatedOrg.acc_num
+      };
+
+      // Filter out empty values
+      const cleanData = Object.fromEntries(
+        Object.entries(updateData).filter(([_, value]) => 
+          value !== undefined && value !== null && value !== ''
+        )
+      );
+
+      // Add GST details if any exist
       const gst_details = {};
       gstEntries.forEach(entry => {
         if (entry.stateCode && entry.gstNumber) {
@@ -70,41 +127,42 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
         }
       });
 
-      // Prepare update payload with correct field names
-      const updatePayload = {
-        name: updatedOrg.name,
-        type: updatedOrg.type,
-        email: updatedOrg.email,
-        phone: updatedOrg.phone,
-        website: updatedOrg.website,
-        reg_number: updatedOrg.reg_number,
-        invoice_prefix: updatedOrg.invoice_prefix,
-        gst_details: gst_details,
-        logo_image: updatedOrg.logo_image,
-        bank_name: updatedOrg.bank_name,
-        acc_name: updatedOrg.acc_name,
-        ifsc: updatedOrg.ifsc,
-        branch: updatedOrg.branch,
-        acc_num: updatedOrg.acc_num
-      };
+      if (Object.keys(gst_details).length > 0) {
+        cleanData.gst_details = JSON.stringify(gst_details);
+      }
 
-      // Remove undefined/null values
-      Object.keys(updatePayload).forEach(key => {
-        if (updatePayload[key] === undefined || updatePayload[key] === null || updatePayload[key] === '') {
-          delete updatePayload[key];
-        }
+      // Validate if there's any data to update
+      if (Object.keys(cleanData).length === 0 && !logoFile && !signatureFile) {
+        alert("❌ No changes detected to update");
+        return;
+      }
+
+      // Create FormData for file upload
+      const formData = new FormData();
+
+      // Add clean data to FormData
+      Object.entries(cleanData).forEach(([key, value]) => {
+        formData.append(key, value);
       });
 
-      console.log('Update payload:', updatePayload);
+      // Add files if they exist
+      if (logoFile) {
+        formData.append('logo_image', logoFile);
+      }
+      if (signatureFile) {
+        formData.append('signature_image', signatureFile);
+      }
+
+      console.log('Updating with data:', Object.fromEntries(formData.entries()));
 
       const response = await axiosInstance({
         method: 'put',
         url: `${API_BASE}/organization/update`,
         params: { org_id: updatedOrg.org_id },
-        data: updatePayload,
+        data: formData,
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'ngrok-skip-browser-warning': 'true'
         }
       });
@@ -143,14 +201,64 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
           <div className="form-grid">
             <div className="form-group full-width">
               <label>Organization Logo</label>
-              <input
-                type="text"
-                name="logo_image"
-                value={updatedOrg.logo_image || ""}
-                onChange={handleChange}
-                placeholder="Enter logo image URL"
-                className="logo-input"
-              />
+              {updatedOrg.logo_image ? (
+                <div className="logo-preview">
+                  <img 
+                    src={updatedOrg.logo_image} 
+                    alt="Current logo" 
+                    className="preview-image"
+                  />
+                  <button 
+                    type="button" 
+                    className="remove-image"
+                    onClick={() => {
+                      setUpdatedOrg(prev => ({...prev, logo_image: ''}));
+                      setLogoFile(null);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <input
+                  type="file"
+                  name="logo_image"
+                  onChange={handleLogoChange}
+                  accept="image/*"
+                  className="file-input"
+                />
+              )}
+            </div>
+
+            <div className="form-group full-width">
+              <label>Signature Image</label>
+              {updatedOrg.signature_image ? (
+                <div className="signature-preview">
+                  <img 
+                    src={updatedOrg.signature_image} 
+                    alt="Current signature" 
+                    className="preview-image"
+                  />
+                  <button 
+                    type="button" 
+                    className="remove-image"
+                    onClick={() => {
+                      setUpdatedOrg(prev => ({...prev, signature_image: ''}));
+                      setSignatureFile(null);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <input
+                  type="file"
+                  name="signature_image"
+                  onChange={handleSignatureChange}
+                  accept="image/*"
+                  className="file-input"
+                />
+              )}
             </div>
 
             <div className="form-group">
@@ -181,6 +289,10 @@ export default function UpdateOrganizationPage({ organization, onClose, setOrgan
             <div className="form-group">
               <label>Registration Number</label>
               <input type="text" name="reg_number" value={updatedOrg.reg_number || ""} onChange={handleChange} />
+            </div>
+            <div className="form-group">
+              <label>PAN Number</label>
+              <input type="text" name="pan_number" value={updatedOrg.pan_number || ""} onChange={handleChange} />
             </div>
 
             <div className="form-group">
